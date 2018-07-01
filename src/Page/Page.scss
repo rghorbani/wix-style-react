@@ -15,8 +15,6 @@ $image-container-offset: 30px;
 }
 
 .page-header-container {
-  padding-top: 30px;
-  // padding-bottom: $scroll-top-threshold;
   position: absolute;
   z-index: 2;
   min-height: 30px;
@@ -24,11 +22,12 @@ $image-container-offset: 30px;
   margin: 0 auto;
   left: 0;
   width: 100%;
-
 }
 
 .page-header-content {
+  padding-top: 30px;
   padding-bottom: $scroll-top-threshold;
+  
   &.minimized {
     padding-top: 18px;
     padding-bottom: 18px;

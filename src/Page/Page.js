@@ -189,7 +189,9 @@ class Page extends WixComponent {
       <div className={s.page}>
         <div
           style={this._pageHeaderContainerStyle()}
-          className={s.pageHeaderContainer}
+          className={classNames(s.pageHeaderContainer, {
+            [s.minimized]: minimized
+          })}
           ref={r => this.pageHeaderRef = r}
           >
           <div
@@ -224,6 +226,7 @@ class Page extends WixComponent {
               PageFixedContent &&
                 <div
                   data-hook="page-fixed-content"
+                  className={s.content}
                   style={pageDimensionsStyle}
                   ref={r => this.pageHeaderFixedContentRef = r}
                   >
