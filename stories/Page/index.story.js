@@ -13,7 +13,7 @@ export default {
   componentPath: '../../src/Page',
 
   componentProps: {
-    children: [header(Breadcrumbs), tail, fixedContent(), content(false)],
+    children: [header(Breadcrumbs), tail, content(false)],
     dataHook: 'story-page',
     gradientClassName: 'background-gradient',
     gradientCoverTail: true,

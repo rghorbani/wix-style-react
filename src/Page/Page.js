@@ -184,6 +184,11 @@ class Page extends WixComponent {
       headerHeightDelta
     } = this._calculateHeaderMeasurements({PageTail});
 
+    const contentClassNameAndStyle = {
+      className: classNames(s.content, {[s.contentFullScreen]: contentFullScreen}),
+      style: contentFullScreen ? null : pageDimensionsStyle
+    };
+
     return (
       <div className={s.page}>
         <div
@@ -225,8 +230,7 @@ class Page extends WixComponent {
               PageFixedContent &&
                 <div
                   data-hook="page-fixed-content"
-                  className={s.content}
-                  style={pageDimensionsStyle}
+                  {...contentClassNameAndStyle}
                   ref={r => this.pageHeaderFixedContentRef = r}
                   >
                   {React.cloneElement(PageFixedContent)}
@@ -263,7 +267,7 @@ class Page extends WixComponent {
                 />
           }
           <div className={s.contentContainer}>
-            <div className={classNames(s.content, {[s.contentFullScreen]: contentFullScreen})} style={contentFullScreen ? null : pageDimensionsStyle}>
+            <div {...contentClassNameAndStyle}>
               {this._safeGetChildren(PageContent)}
             </div>
             {headerHeightDelta ? <div style={{height: `${headerHeightDelta}px`}}/> : null}
