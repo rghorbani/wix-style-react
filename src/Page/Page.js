@@ -10,7 +10,7 @@ import {ResizeSensor} from 'css-element-queries';
 
 const SCROLL_TOP_THRESHOLD = 20;
 const SHORT_SCROLL_TOP_THRESHOLD = 3;
-
+const TAIL_TOP_PADDING_PX = 20;
 /**
  * A page container which contains a header and scrollable content
  */
@@ -30,6 +30,7 @@ class Page extends WixComponent {
     this.state = {
       headerHeight: 0,
       tailHeight: 0,
+      fixedContentHeight: 0,
       scrollBarWidth: 0,
       minimized: false
     };
@@ -55,19 +56,23 @@ class Page extends WixComponent {
   }
 
   _calculateComponentsHeights() {
-    const {headerHeight, tailHeight} = this.state;
+    const {headerHeight, tailHeight, fixedContentHeight} = this.state;
     const newHeaderHeight = this.pageHeaderRef ? this.pageHeaderRef.offsetHeight : headerHeight;
     const newTailHeight = this.pageHeaderTailRef ? this.pageHeaderTailRef.offsetHeight : tailHeight;
+    const newFixedContentHeight = this.pageHeaderFixedContentRef ? this.pageHeaderFixedContentRef.offsetHeight : fixedContentHeight;
 
-    if (headerHeight !== newHeaderHeight || tailHeight !== newTailHeight) {
+    if (headerHeight !== newHeaderHeight ||
+        tailHeight !== newTailHeight ||
+        fixedContentHeight !== newFixedContentHeight) {
       this.setState({
         headerHeight: newHeaderHeight,
-        tailHeight: newTailHeight
+        tailHeight: newTailHeight,
+        fixedContentHeight: newFixedContentHeight
       });
     }
   }
 
-  _setContainerScrollTopThreshold(shortThreshold) {
+  _setContainerScrollTopThreshold({shortThreshold}) {
     this.containerScrollTopThreshold = shortThreshold ? SHORT_SCROLL_TOP_THRESHOLD : SCROLL_TOP_THRESHOLD;
   }
 
@@ -137,26 +142,47 @@ class Page extends WixComponent {
     return null;
   }
 
+  _calculateHeaderMeasurements({PageTail}) {
+    const {gradientCoverTail} = this.props;
+    const {headerHeight, tailHeight, fixedContentHeight, minimized} = this.state;
+    const headerContentHeight = headerHeight - fixedContentHeight;
+
+    const imageHeight = `${headerContentHeight + (PageTail ? -tailHeight : 39)}px`;
+    const gradientHeight = gradientCoverTail ? `${headerContentHeight + (PageTail ? -SCROLL_TOP_THRESHOLD : 39)}px` : imageHeight;
+    const minimizedHeaderHeight = PageTail ? headerContentHeight - 78 : headerContentHeight - (78 - TAIL_TOP_PADDING_PX);
+    const calculatedHeaderHeight = !minimized ? headerContentHeight : minimizedHeaderHeight;
+    const headerHeightDelta = headerContentHeight - calculatedHeaderHeight;
+
+    return {
+      imageHeight,
+      gradientHeight,
+      calculatedHeaderHeight,
+      headerHeightDelta
+    };
+  }
+
   render() {
-    const {backgroundImageUrl, gradientClassName, children, gradientCoverTail} = this.props;
-    const {headerHeight, tailHeight, minimized} = this.state;
+    const {backgroundImageUrl, gradientClassName, children} = this.props;
+    const {minimized} = this.state;
     const hasBackgroundImage = !!backgroundImageUrl;
     const hasGradientClassName = !!gradientClassName && !backgroundImageUrl;
     const {
       PageHeader,
       PageContent,
+      PageFixedContent,
       PageTail
     } = getChildrenObject(children);
-
-    this._setContainerScrollTopThreshold(PageTail && hasGradientClassName);
+    this._setContainerScrollTopThreshold({shortThreshold: PageTail && hasGradientClassName});
     const contentFullScreen = PageContent && PageContent.props.fullScreen;
     const pageDimensionsStyle = this._calculatePageDimensionsStyle();
+    const {
+      imageHeight,
+      gradientHeight,
+      calculatedHeaderHeight,
+      headerHeightDelta
+    } = this._calculateHeaderMeasurements({PageTail});
 
-    const imageHeight = `${headerHeight + (PageTail ? -tailHeight : 39)}px`;
-    const gradientHeight = gradientCoverTail ? `${headerHeight + (PageTail ? -SCROLL_TOP_THRESHOLD : 39)}px` : imageHeight;
-    const calculatedHeaderHeight = !minimized ? headerHeight : PageTail ? headerHeight - 78 : headerHeight - 54;
-    const headerHeightDelta = headerHeight - calculatedHeaderHeight;
-
+    console.log('render() calculatedHeaderHeight=', calculatedHeaderHeight);
     return (
       <div className={s.page}>
         <div
@@ -167,6 +193,7 @@ class Page extends WixComponent {
           })}
           ref={r => this.pageHeaderRef = r}
           >
+          {/* <div className={s.pageHeaderContent}> */}
           {
             PageHeader &&
               <div className={s.pageHeader} style={pageDimensionsStyle}>
@@ -176,7 +203,7 @@ class Page extends WixComponent {
                     hasBackgroundImage
                   })}
               </div>
-          }
+            }
           {
             PageTail &&
               <div
@@ -187,6 +214,17 @@ class Page extends WixComponent {
                 >
                 {React.cloneElement(PageTail, {minimized})}
               </div>
+            }
+          {/* </div> */}
+          {
+              PageFixedContent &&
+                <div
+                  data-hook="page-fixed-content"
+                  style={pageDimensionsStyle}
+                  ref={r => this.pageHeaderFixedContentRef = r}
+                  >
+                  {React.cloneElement(PageFixedContent)}
+                </div>
           }
         </div>
         <div
@@ -230,9 +268,17 @@ class Page extends WixComponent {
   }
 }
 
+const FixedContent = props => props.children;
+Content.displayName = 'Page.FixedContent';
+Content.propTypes = {
+  children: PropTypes.element.isRequired
+};
+
+
 Page.displayName = 'Page';
 Page.Header = PageHeader;
 Page.Content = Content;
+Page.FixedContent = FixedContent;
 Page.Tail = Tail;
 
 Page.propTypes = {
@@ -247,6 +293,7 @@ Page.propTypes = {
   /** If false Gradient will not cover Page.Tail */
   gradientCoverTail: PropTypes.bool,
   children: PropTypes.arrayOf((children, key) => {
+    console.log('validate: ');
     const childrenObj = getChildrenObject(children);
 
     if (!childrenObj.PageHeader) {
@@ -260,6 +307,7 @@ Page.propTypes = {
     if (
       children[key].type !== Page.Header &&
       children[key].type !== Page.Content &&
+      children[key].type !== Page.FixedContent &&
       children[key].type !== Page.Tail
     ) {
       return new Error(`Page: Invalid Prop children, unknown child ${children[key].type}`);
@@ -268,6 +316,7 @@ Page.propTypes = {
 };
 
 function getChildrenObject(children) {
+  console.log('getChildren: ', React.Children.toArray(children));
   return React.Children.toArray(children).reduce((acc, child) => {
     switch (child.type) {
       case Page.Header : {
@@ -276,6 +325,10 @@ function getChildrenObject(children) {
       }
       case Page.Content : {
         acc.PageContent = child;
+        break;
+      }
+      case Page.FixedContent : {
+        acc.PageFixedContent = child;
         break;
       }
       case Page.Tail : {
