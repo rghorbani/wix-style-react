@@ -36,7 +36,7 @@ export default {
       },
       {
         label: 'header, tail, fixed-content & content',
-        value: [header(Breadcrumbs), tail, fixedContent, content(false)]
+        value: [header(Breadcrumbs), tail, fixedContent(), content(false)]
       }
     ],
     backgroundImageUrl: [

@@ -57,10 +57,9 @@ class Page extends WixComponent {
 
   _calculateComponentsHeights() {
     const {headerHeight, tailHeight, fixedContentHeight} = this.state;
-    const newHeaderHeight = this.pageHeaderRef ? this.pageHeaderRef.offsetHeight : headerHeight;
-    const newTailHeight = this.pageHeaderTailRef ? this.pageHeaderTailRef.offsetHeight : tailHeight;
-    const newFixedContentHeight = this.pageHeaderFixedContentRef ? this.pageHeaderFixedContentRef.offsetHeight : fixedContentHeight;
-
+    const newHeaderHeight = this.pageHeaderRef ? this.pageHeaderRef.offsetHeight : 0;
+    const newTailHeight = this.pageHeaderTailRef ? this.pageHeaderTailRef.offsetHeight : 0;
+    const newFixedContentHeight = this.pageHeaderFixedContentRef ? this.pageHeaderFixedContentRef.offsetHeight : 0;
     if (headerHeight !== newHeaderHeight ||
         tailHeight !== newTailHeight ||
         fixedContentHeight !== newFixedContentHeight) {
@@ -197,7 +196,7 @@ class Page extends WixComponent {
           <div
             className={classNames(s.pageHeaderContent, {
               [s.minimized]: minimized,
-              [s.withoutBottomPadding]: minimized
+              [s.withoutBottomPadding]: PageTail && minimized
             })}
             >
             {
@@ -300,7 +299,6 @@ Page.propTypes = {
   /** If false Gradient will not cover Page.Tail */
   gradientCoverTail: PropTypes.bool,
   children: PropTypes.arrayOf((children, key) => {
-    console.log('validate: ');
     const childrenObj = getChildrenObject(children);
 
     if (!childrenObj.PageHeader) {
@@ -323,7 +321,6 @@ Page.propTypes = {
 };
 
 function getChildrenObject(children) {
-  console.log('getChildren: ', React.Children.toArray(children));
   return React.Children.toArray(children).reduce((acc, child) => {
     switch (child.type) {
       case Page.Header : {
