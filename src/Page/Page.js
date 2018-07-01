@@ -147,17 +147,20 @@ class Page extends WixComponent {
     const {headerHeight, tailHeight, fixedContentHeight, minimized} = this.state;
     const headerContentHeight = headerHeight - fixedContentHeight;
 
-    const imageHeight = `${headerContentHeight + (PageTail ? -tailHeight : 39)}px`;
-    const gradientHeight = gradientCoverTail ? `${headerContentHeight + (PageTail ? -SCROLL_TOP_THRESHOLD : 39)}px` : imageHeight;
     const minimizedHeaderHeight = PageTail ? headerContentHeight - 78 : headerContentHeight - (78 - TAIL_TOP_PADDING_PX);
+
     const calculatedHeaderHeight = !minimized ? headerContentHeight : minimizedHeaderHeight;
     const headerHeightDelta = headerContentHeight - calculatedHeaderHeight;
+    const headerContainerHeight = calculatedHeaderHeight + fixedContentHeight;
+
+    const imageHeight = `${headerContentHeight + (PageTail ? -tailHeight : 39)}px`;
+    const gradientHeight = gradientCoverTail ? `${headerContentHeight + (PageTail ? -SCROLL_TOP_THRESHOLD : 39)}px` : imageHeight;
 
     return {
       imageHeight,
       gradientHeight,
-      calculatedHeaderHeight,
-      headerHeightDelta
+      headerHeightDelta,
+      headerContainerHeight
     };
   }
 
@@ -178,23 +181,24 @@ class Page extends WixComponent {
     const {
       imageHeight,
       gradientHeight,
-      calculatedHeaderHeight,
+      headerContainerHeight: scrollableContentOffset,
       headerHeightDelta
     } = this._calculateHeaderMeasurements({PageTail});
 
-    console.log('render() calculatedHeaderHeight=', calculatedHeaderHeight);
     return (
       <div className={s.page}>
         <div
           style={this._pageHeaderContainerStyle()}
-          className={classNames(s.pageHeaderContainer, {
-            [s.minimized]: minimized,
-            [s.withoutBottomPadding]: PageTail && minimized
-          })}
+          className={s.pageHeaderContainer}
           ref={r => this.pageHeaderRef = r}
           >
-          {/* <div className={s.pageHeaderContent}> */}
-          {
+          <div
+            className={classNames(s.pageHeaderContent, {
+              [s.minimized]: minimized,
+              [s.withoutBottomPadding]: minimized
+            })}
+            >
+            {
             PageHeader &&
               <div className={s.pageHeader} style={pageDimensionsStyle}>
                 {React.cloneElement(
@@ -204,7 +208,7 @@ class Page extends WixComponent {
                   })}
               </div>
             }
-          {
+            {
             PageTail &&
               <div
                 data-hook="page-tail"
@@ -215,7 +219,7 @@ class Page extends WixComponent {
                 {React.cloneElement(PageTail, {minimized})}
               </div>
             }
-          {/* </div> */}
+          </div>
           {
               PageFixedContent &&
                 <div
@@ -232,7 +236,7 @@ class Page extends WixComponent {
           onScroll={this._handleScroll}
           data-hook="page-scrollable-content"
           data-class="page-scrollable-content"
-          style={{paddingTop: `${calculatedHeaderHeight}px`}}
+          style={{paddingTop: `${scrollableContentOffset}px`}}
           ref={r => this.scrollableContentRef = r}
           >
           {

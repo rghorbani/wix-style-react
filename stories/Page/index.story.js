@@ -2,7 +2,7 @@ import Page from 'wix-style-react/Page';
 import Breadcrumbs from './Breadcrumbs';
 import {storybookConfig} from './storybookConfig';
 
-import {header, tail, content} from './PageChildren';
+import {header, tail, fixedContent, content} from './PageChildren';
 import './Page.scss';
 
 export default {
@@ -13,7 +13,7 @@ export default {
   componentPath: '../../src/Page',
 
   componentProps: {
-    children: [header(Breadcrumbs), tail, content(false)],
+    children: [header(Breadcrumbs), tail, fixedContent(), content(false)],
     dataHook: 'story-page',
     gradientClassName: 'background-gradient',
     gradientCoverTail: true,
@@ -33,6 +33,10 @@ export default {
       {
         label: 'just content',
         value: [content(false)]
+      },
+      {
+        label: 'header, tail, fixed-content & content',
+        value: [header(Breadcrumbs), tail, fixedContent, content(false)]
       }
     ],
     backgroundImageUrl: [
