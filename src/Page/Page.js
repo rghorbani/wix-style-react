@@ -223,13 +223,11 @@ class Page extends WixComponent {
       <div className={s.page}>
         <div
           style={this._fixedContainerStyle()}
-          className={classNames(s.fixedContainer, {
-            [s.minimized]: minimized
-          })}
+          className={classNames(s.fixedContainer)}
           ref={r => this.fixedContainerRef = r}
           >
           <div
-            className={classNames(s.pageHeaderContent, {
+            className={classNames(s.pageHeaderContainer, {
               [s.minimized]: minimized,
               [s.withoutBottomPadding]: PageTail && minimized
             })}
