@@ -13,6 +13,35 @@ const SHORT_SCROLL_TOP_THRESHOLD = 3;
 const TAIL_TOP_PADDING_PX = 20;
 /**
  * A page container which contains a header and scrollable content
+ *
+ * Page structure is as follows:
+ * @example
+ * +-- FixedContainer --------
+ * | +-- HeaderContent --------
+ * | |  header-content:padding-top
+ * | | +-- Page.Header --------
+ * | | |
+ * | | |
+ * | | +-----------------------
+ * | |  tail:padding-top
+ * | | +-- Page.Tail ----------
+ * | | |
+ * | | |
+ * | | +-----------------------
+ * | |  header-content:padding-bottom
+ * | +-------------------------
+ * | +-- Page.FixedContent ----   ==+
+ * | |                              |
+ * | +-------------------------     |
+ * +---------------------------     | Content (Virtual)
+ * +--  ScrollableContainer ---     |
+ * | +-- Page.Content ----------    |                            |
+ * | |                              |
+ * | +--------------------------    |
+ * +---------------------------   ==+
+ *
+ * -  ScrollableContainer is called in the code scrollable-content, and should NOT be renamed, since
+ * Tooltip is hard-coded-ly using a selector like this: [data-class="page-scrollable-content"]
  */
 class Page extends WixComponent {
 
@@ -28,7 +57,7 @@ class Page extends WixComponent {
     this._handleResize = this._handleResize.bind(this);
 
     this.state = {
-      headerContainerHeight: 0,
+      fixedContainerHeight: 0,
       tailHeight: 0,
       fixedContentHeight: 0,
       scrollBarWidth: 0,
@@ -56,15 +85,15 @@ class Page extends WixComponent {
   }
 
   _calculateComponentsHeights() {
-    const {headerContainerHeight, tailHeight, fixedContentHeight} = this.state;
-    const newHeaderHeight = this.pageHeaderRef ? this.pageHeaderRef.offsetHeight : 0;
+    const {fixedContainerHeight, tailHeight, fixedContentHeight} = this.state;
+    const newFixedContainerHeight = this.fixedContainerRef ? this.fixedContainerRef.offsetHeight : 0;
     const newTailHeight = this.pageHeaderTailRef ? this.pageHeaderTailRef.offsetHeight : 0;
     const newFixedContentHeight = this.pageHeaderFixedContentRef ? this.pageHeaderFixedContentRef.offsetHeight : 0;
-    if (headerContainerHeight !== newHeaderHeight ||
+    if (fixedContainerHeight !== newFixedContainerHeight ||
         tailHeight !== newTailHeight ||
         fixedContentHeight !== newFixedContentHeight) {
       this.setState({
-        headerContainerHeight: newHeaderHeight,
+        fixedContainerHeight: newFixedContainerHeight,
         tailHeight: newTailHeight,
         fixedContentHeight: newFixedContentHeight
       });
@@ -133,7 +162,7 @@ class Page extends WixComponent {
     return styles;
   }
 
-  _pageHeaderContainerStyle() {
+  _fixedContainerStyle() {
     const {scrollBarWidth} = this.state;
     if (scrollBarWidth) {
       return {width: `calc(100% - ${scrollBarWidth}px`};
@@ -142,29 +171,14 @@ class Page extends WixComponent {
   }
 
   /**
-   * +-- HeaderContainer --------
-   * | +-- HeaderContent --------
-   * | | +-- Page.Header --------
-   * | | |
-   * | | +-----------------------
-   * | |
-   * | | +-- Page.Tail ----------
-   * | | |  tail-padding-top
-   * | | |
-   * | | +-----------------------
-   * | |  header-content-padding-bottom
-   * | +-------------------------
-   * | +-- Page.FixedContent ----
-   * | |
-   * | +-------------------------
-   * +---------------------------
+   * See diagram in class documentation to better understand this method.
    */
   _calculateHeaderMeasurements({PageTail}) {
     const {gradientCoverTail} = this.props;
-    // headerContainerHeight (and other heights) are calculated only when the Page is NOT minimized
-    const {headerContainerHeight, tailHeight, fixedContentHeight} = this.state;
+    // fixedContainerHeight (and other heights) are calculated only when the Page is NOT minimized
+    const {fixedContainerHeight, tailHeight, fixedContentHeight} = this.state;
 
-    const headerContentHeight = headerContainerHeight - fixedContentHeight;
+    const headerContentHeight = fixedContainerHeight - fixedContentHeight;
 
     const minimizedHeaderContentHeight = PageTail ? headerContentHeight - 78 : headerContentHeight - (78 - TAIL_TOP_PADDING_PX);
 
@@ -200,7 +214,7 @@ class Page extends WixComponent {
       minimizedHeaderContentHeight
     } = this._calculateHeaderMeasurements({PageTail});
 
-    const contentClassNameAndStyle = {
+    const contentLayoutProps = {
       className: classNames(s.content, {[s.contentFullScreen]: contentFullScreen}),
       style: contentFullScreen ? null : pageDimensionsStyle
     };
@@ -208,11 +222,11 @@ class Page extends WixComponent {
     return (
       <div className={s.page}>
         <div
-          style={this._pageHeaderContainerStyle()}
-          className={classNames(s.pageHeaderContainer, {
+          style={this._fixedContainerStyle()}
+          className={classNames(s.fixedContainer, {
             [s.minimized]: minimized
           })}
-          ref={r => this.pageHeaderRef = r}
+          ref={r => this.fixedContainerRef = r}
           >
           <div
             className={classNames(s.pageHeaderContent, {
@@ -246,7 +260,7 @@ class Page extends WixComponent {
               PageFixedContent &&
                 <div
                   data-hook="page-fixed-content"
-                  {...contentClassNameAndStyle}
+                  {...contentLayoutProps}
                   ref={r => this.pageHeaderFixedContentRef = r}
                   >
                   {React.cloneElement(PageFixedContent)}
@@ -283,7 +297,7 @@ class Page extends WixComponent {
                 />
           }
           <div className={s.contentContainer}>
-            <div {...contentClassNameAndStyle}>
+            <div {...contentLayoutProps}>
               {this._safeGetChildren(PageContent)}
             </div>
             {minimized ? <div style={{height: `${headerContentHeight - minimizedHeaderContentHeight}px`}}/> : null}
@@ -295,8 +309,8 @@ class Page extends WixComponent {
 }
 
 const FixedContent = props => props.children;
-Content.displayName = 'Page.FixedContent';
-Content.propTypes = {
+FixedContent.displayName = 'Page.FixedContent';
+FixedContent.propTypes = {
   children: PropTypes.element.isRequired
 };
 

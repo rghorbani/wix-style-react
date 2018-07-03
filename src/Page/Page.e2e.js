@@ -35,7 +35,7 @@ describe('Page', async () => {
       await eventually(() => !driver.titleExists());
     });
 
-    eyes.it('should display minimized with background-image/gradient still visible', async () => {
+    eyes.it('should display minimized with header background still visible', async () => {
       const driver = await initTest(initTestConfig);
       expect(await driver.titleExists()).toBeTruthy();
       await driver[PRIVATE].setContentScrollOffset(SCROLL_TOP_MIN_STEP);
