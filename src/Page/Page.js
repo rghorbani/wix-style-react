@@ -178,18 +178,18 @@ class Page extends WixComponent {
     // fixedContainerHeight (and other heights) are calculated only when the Page is NOT minimized
     const {fixedContainerHeight, tailHeight, fixedContentHeight} = this.state;
 
+
+    const minimizedFixedContainerHeight = PageTail ? fixedContainerHeight - 78 : fixedContainerHeight - (78 - TAIL_TOP_PADDING_PX);
+
     const headerContentHeight = fixedContainerHeight - fixedContentHeight;
-
-    const minimizedHeaderContentHeight = PageTail ? headerContentHeight - 78 : headerContentHeight - (78 - TAIL_TOP_PADDING_PX);
-
     const imageHeight = `${headerContentHeight + (PageTail ? -tailHeight : 39)}px`;
     const gradientHeight = gradientCoverTail ? `${headerContentHeight + (PageTail ? -SCROLL_TOP_THRESHOLD : 39)}px` : imageHeight;
 
     return {
       imageHeight,
       gradientHeight,
-      headerContentHeight,
-      minimizedHeaderContentHeight
+      fixedContainerHeight,
+      minimizedFixedContainerHeight
     };
   }
 
@@ -210,8 +210,8 @@ class Page extends WixComponent {
     const {
       imageHeight,
       gradientHeight,
-      headerContentHeight,
-      minimizedHeaderContentHeight
+      fixedContainerHeight,
+      minimizedFixedContainerHeight
     } = this._calculateHeaderMeasurements({PageTail});
 
     const contentLayoutProps = {
@@ -272,7 +272,7 @@ class Page extends WixComponent {
           onScroll={this._handleScroll}
           data-hook="page-scrollable-content"
           data-class="page-scrollable-content"
-          style={{paddingTop: `${minimized ? minimizedHeaderContentHeight : headerContentHeight}px`}}
+          style={{paddingTop: `${minimized ? minimizedFixedContainerHeight : fixedContainerHeight}px`}}
           ref={r => this.scrollableContentRef = r}
           >
           {
@@ -300,7 +300,7 @@ class Page extends WixComponent {
             <div {...contentLayoutProps}>
               {this._safeGetChildren(PageContent)}
             </div>
-            {minimized ? <div style={{height: `${headerContentHeight - minimizedHeaderContentHeight}px`}}/> : null}
+            {minimized ? <div style={{height: `${fixedContainerHeight - minimizedFixedContainerHeight}px`}}/> : null}
           </div>
         </div>
       </div>
