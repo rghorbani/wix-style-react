@@ -78,4 +78,17 @@ describe('Page', async () => {
     });
   });
 
+  describe('Header + FixedContent + Content', async () => {
+
+    describe('With Background-Image', () => {
+      const dataHook = 'story-page-background-image-header-fixed-content-content';
+      runTestCases({dataHook});
+    });
+
+    describe('With Gradient', () => {
+      const dataHook = 'story-page-gradient-header-fixed-content-content';
+      runTestCases({dataHook});
+    });
+  });
+
 });
