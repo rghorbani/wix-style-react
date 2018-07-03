@@ -28,7 +28,7 @@ class Page extends WixComponent {
     this._handleResize = this._handleResize.bind(this);
 
     this.state = {
-      headerHeight: 0,
+      headerContainerHeight: 0,
       tailHeight: 0,
       fixedContentHeight: 0,
       scrollBarWidth: 0,
@@ -56,15 +56,15 @@ class Page extends WixComponent {
   }
 
   _calculateComponentsHeights() {
-    const {headerHeight, tailHeight, fixedContentHeight} = this.state;
+    const {headerContainerHeight, tailHeight, fixedContentHeight} = this.state;
     const newHeaderHeight = this.pageHeaderRef ? this.pageHeaderRef.offsetHeight : 0;
     const newTailHeight = this.pageHeaderTailRef ? this.pageHeaderTailRef.offsetHeight : 0;
     const newFixedContentHeight = this.pageHeaderFixedContentRef ? this.pageHeaderFixedContentRef.offsetHeight : 0;
-    if (headerHeight !== newHeaderHeight ||
+    if (headerContainerHeight !== newHeaderHeight ||
         tailHeight !== newTailHeight ||
         fixedContentHeight !== newFixedContentHeight) {
       this.setState({
-        headerHeight: newHeaderHeight,
+        headerContainerHeight: newHeaderHeight,
         tailHeight: newTailHeight,
         fixedContentHeight: newFixedContentHeight
       });
@@ -141,16 +141,32 @@ class Page extends WixComponent {
     return null;
   }
 
+  /**
+   * +-- HeaderContainer --------
+   * | +-- HeaderContent --------
+   * | | +-- Page.Header --------
+   * | | |
+   * | | +-----------------------
+   * | |
+   * | | +-- Page.Tail ----------
+   * | | |  tail-padding-top
+   * | | |
+   * | | +-----------------------
+   * | |  header-content-padding-bottom
+   * | +-------------------------
+   * | +-- Page.FixedContent ----
+   * | |
+   * | +-------------------------
+   * +---------------------------
+   */
   _calculateHeaderMeasurements({PageTail}) {
     const {gradientCoverTail} = this.props;
-    const {headerHeight, tailHeight, fixedContentHeight, minimized} = this.state;
-    const headerContentHeight = headerHeight - fixedContentHeight;
+    // headerContainerHeight (and other heights) are calculated only when the Page is NOT minimized
+    const {headerContainerHeight, tailHeight, fixedContentHeight} = this.state;
 
-    const minimizedHeaderHeight = PageTail ? headerContentHeight - 78 : headerContentHeight - (78 - TAIL_TOP_PADDING_PX);
+    const headerContentHeight = headerContainerHeight - fixedContentHeight;
 
-    const calculatedHeaderHeight = !minimized ? headerContentHeight : minimizedHeaderHeight;
-    const headerHeightDelta = headerContentHeight - calculatedHeaderHeight;
-    const headerContainerHeight = calculatedHeaderHeight + fixedContentHeight;
+    const minimizedHeaderContentHeight = PageTail ? headerContentHeight - 78 : headerContentHeight - (78 - TAIL_TOP_PADDING_PX);
 
     const imageHeight = `${headerContentHeight + (PageTail ? -tailHeight : 39)}px`;
     const gradientHeight = gradientCoverTail ? `${headerContentHeight + (PageTail ? -SCROLL_TOP_THRESHOLD : 39)}px` : imageHeight;
@@ -158,8 +174,8 @@ class Page extends WixComponent {
     return {
       imageHeight,
       gradientHeight,
-      headerHeightDelta,
-      headerContainerHeight
+      headerContentHeight,
+      minimizedHeaderContentHeight
     };
   }
 
@@ -180,8 +196,8 @@ class Page extends WixComponent {
     const {
       imageHeight,
       gradientHeight,
-      headerContainerHeight: scrollableContentOffset,
-      headerHeightDelta
+      headerContentHeight,
+      minimizedHeaderContentHeight
     } = this._calculateHeaderMeasurements({PageTail});
 
     const contentClassNameAndStyle = {
@@ -242,7 +258,7 @@ class Page extends WixComponent {
           onScroll={this._handleScroll}
           data-hook="page-scrollable-content"
           data-class="page-scrollable-content"
-          style={{paddingTop: `${scrollableContentOffset}px`}}
+          style={{paddingTop: `${minimized ? minimizedHeaderContentHeight : headerContentHeight}px`}}
           ref={r => this.scrollableContentRef = r}
           >
           {
@@ -270,7 +286,7 @@ class Page extends WixComponent {
             <div {...contentClassNameAndStyle}>
               {this._safeGetChildren(PageContent)}
             </div>
-            {headerHeightDelta ? <div style={{height: `${headerHeightDelta}px`}}/> : null}
+            {minimized ? <div style={{height: `${headerContentHeight - minimizedHeaderContentHeight}px`}}/> : null}
           </div>
         </div>
       </div>
