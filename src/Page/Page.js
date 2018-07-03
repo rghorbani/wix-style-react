@@ -17,7 +17,7 @@ const TAIL_TOP_PADDING_PX = 20;
  * Page structure is as follows:
  * @example
  * +-- FixedContainer --------
- * | +-- HeaderContent --------
+ * | +-- HeaderContainer --------
  * | |  header-content:padding-top
  * | | +-- Page.Header --------
  * | | |
@@ -181,9 +181,9 @@ class Page extends WixComponent {
 
     const minimizedFixedContainerHeight = PageTail ? fixedContainerHeight - 78 : fixedContainerHeight - (78 - TAIL_TOP_PADDING_PX);
 
-    const headerContentHeight = fixedContainerHeight - fixedContentHeight;
-    const imageHeight = `${headerContentHeight + (PageTail ? -tailHeight : 39)}px`;
-    const gradientHeight = gradientCoverTail ? `${headerContentHeight + (PageTail ? -SCROLL_TOP_THRESHOLD : 39)}px` : imageHeight;
+    const headerContainerHeight = fixedContainerHeight - fixedContentHeight;
+    const imageHeight = `${headerContainerHeight + (PageTail ? -tailHeight : 39)}px`;
+    const gradientHeight = gradientCoverTail ? `${headerContainerHeight + (PageTail ? -SCROLL_TOP_THRESHOLD : 39)}px` : imageHeight;
 
     return {
       imageHeight,
