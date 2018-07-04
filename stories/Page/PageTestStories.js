@@ -21,10 +21,9 @@ PageContainer.propTypes = {
   children: PropTypes.any
 };
 
-storiesOf(`${TESTS_PREFIX}/${storybookConfig.category}`, module)
-.add(storybookConfig.storyName, () => (
+storiesOf(`${TESTS_PREFIX}/${storybookConfig.category}/${storybookConfig.storyName}`, module)
+.add('1. Image', () => (
   <div>
-    <h1>Page Tests</h1>
     <h2>1) With Background-Image, Children: Header + Content (Without Tail)</h2>
     <PageContainer>
       <Page
@@ -33,6 +32,11 @@ storiesOf(`${TESTS_PREFIX}/${storybookConfig.category}`, module)
         backgroundImageUrl="https://static.wixstatic.com/media/f0548921c53940ec803dfb1c203e96fe.jpg/v1/fill/w_400,h_100/f0548921c53940ec803dfb1c203e96fe.jpg"
         />
     </PageContainer>
+  </div>
+    ));
+storiesOf(`${TESTS_PREFIX}/${storybookConfig.category}/${storybookConfig.storyName}`, module)
+.add('2. Gradient', () => (
+  <div>
     <h2>2) With Gradient, Children: Header + Content (Without Tail)</h2>
     <PageContainer>
       <Page

@@ -4,6 +4,9 @@ import {pageTestkitFactory, getStoryUrl, waitForVisibilityOf, scrollToElement} f
 import autoExampleDriver from 'wix-storybook-utils/AutoExampleDriver';
 import {PRIVATE} from './Page.protractor.driver';
 import {TESTS_PREFIX} from '../../stories/storyCategories';
+import {storybookConfig} from '../../stories/Page/storybookConfig';
+
+const {category, storyName} = storybookConfig;
 
 const SCROLL_TOP_THRESHOLD = 20;
 const SCROLL_TOP_MIN_STEP = SCROLL_TOP_THRESHOLD + 1;
@@ -41,7 +44,7 @@ describe('Page', async () => {
   };
 
   describe('Header + Tail + Content', async () => {
-    const storyUrl = getStoryUrl('2. Layout', '2.5 Page');
+    const storyUrl = getStoryUrl(category, storyName);
     const dataHook = 'story-page';
 
     eyes.it('should display maximized when scrolled up given minimized', async () => {
@@ -62,14 +65,14 @@ describe('Page', async () => {
   });
 
   describe('Header + Content', async () => {
-    const storyUrl = getStoryUrl(`${TESTS_PREFIX}/2. Layout`, '2.5 Page');
-
     describe('With Background-Image', () => {
+      const storyUrl = getStoryUrl(`${TESTS_PREFIX}/${category}/${storyName}`, '1. Image');
       const dataHook = 'story-page-background-image-header-content';
       runTestCases({storyUrl, dataHook});
     });
 
     describe('With Gradient', () => {
+      const storyUrl = getStoryUrl(`${TESTS_PREFIX}/${category}/${storyName}`, '2. Gradient');
       const dataHook = 'story-page-gradient-header-content';
       runTestCases({storyUrl, dataHook});
     });
