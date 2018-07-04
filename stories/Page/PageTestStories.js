@@ -23,27 +23,21 @@ PageContainer.propTypes = {
 
 storiesOf(`${TESTS_PREFIX}/${storybookConfig.category}/${storybookConfig.storyName}`, module)
 .add('1. Image', () => (
-  <div>
-    <h2>1) With Background-Image, Children: Header + Content (Without Tail)</h2>
-    <PageContainer>
-      <Page
-        dataHook="story-page-background-image-header-content"
-        children={[header(Breadcrumbs), content(false)]}
-        backgroundImageUrl="https://static.wixstatic.com/media/f0548921c53940ec803dfb1c203e96fe.jpg/v1/fill/w_400,h_100/f0548921c53940ec803dfb1c203e96fe.jpg"
-        />
-    </PageContainer>
-  </div>
+  <PageContainer>
+    <Page
+      dataHook="story-page-background-image-header-content"
+      children={[header(Breadcrumbs), content(false)]}
+      backgroundImageUrl="https://static.wixstatic.com/media/f0548921c53940ec803dfb1c203e96fe.jpg/v1/fill/w_400,h_100/f0548921c53940ec803dfb1c203e96fe.jpg"
+      />
+  </PageContainer>
     ));
 storiesOf(`${TESTS_PREFIX}/${storybookConfig.category}/${storybookConfig.storyName}`, module)
 .add('2. Gradient', () => (
-  <div>
-    <h2>2) With Gradient, Children: Header + Content (Without Tail)</h2>
-    <PageContainer>
-      <Page
-        dataHook="story-page-gradient-header-content"
-        children={[header(Breadcrumbs), content(false)]}
-        gradientClassName="background-gradient"
-        />
-    </PageContainer>
-  </div>
+  <PageContainer>
+    <Page
+      dataHook="story-page-gradient-header-content"
+      children={[header(Breadcrumbs), content(false)]}
+      gradientClassName="background-gradient"
+      />
+  </PageContainer>
 ));
