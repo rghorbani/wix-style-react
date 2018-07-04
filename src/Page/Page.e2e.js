@@ -1,6 +1,8 @@
 import eyes from 'eyes.it';
 import eventually from 'wix-eventually';
-import {pageTestkitFactory, getStoryUrl, waitForVisibilityOf, scrollToElement} from '../../testkit/protractor';
+
+import {pageTestkitFactory, waitForVisibilityOf, scrollToElement} from '../../testkit/protractor';
+import {createStoryUrl} from '../../test/utils/protractor';
 import autoExampleDriver from 'wix-storybook-utils/AutoExampleDriver';
 import {PRIVATE} from './Page.protractor.driver';
 import {TESTS_PREFIX} from '../../stories/storyCategories';
@@ -13,10 +15,14 @@ const SCROLL_TOP_MIN_STEP = SCROLL_TOP_THRESHOLD + 1;
 
 describe('Page', async () => {
 
+  const createTestStoryUrl = testName => {
+    return createStoryUrl({kind: `${TESTS_PREFIX}/${category}/${storyName}`, storyName: testName});
+  };
+
   const initTest = async ({storyUrl, dataHook, props}) => {
     await browser.get(storyUrl);
     const driver = pageTestkitFactory({dataHook});
-    await waitForVisibilityOf(driver.element(), 'Cannot find Button');
+    await waitForVisibilityOf(driver.element(), 'Cannot find Page');
     await scrollToElement(driver.element());
     props && await autoExampleDriver.setProps(props);
     return driver;
@@ -44,7 +50,7 @@ describe('Page', async () => {
   };
 
   describe('Header + Tail + Content', async () => {
-    const storyUrl = getStoryUrl(category, storyName);
+    const storyUrl = createStoryUrl({kind: storybookConfig.category, storyName: storybookConfig.storyName, withExamples: false});
     const dataHook = 'story-page';
 
     eyes.it('should display maximized when scrolled up given minimized', async () => {
@@ -65,15 +71,17 @@ describe('Page', async () => {
   });
 
   describe('Header + Content', async () => {
+
     describe('With Background-Image', () => {
-      const storyUrl = getStoryUrl(`${TESTS_PREFIX}/${category}/${storyName}`, '1. Image');
-      const dataHook = 'story-page-background-image-header-content';
+      const storyUrl = createTestStoryUrl('1. Image');
+      const dataHook = 'story-page';
       runTestCases({storyUrl, dataHook});
     });
 
     describe('With Gradient', () => {
-      const storyUrl = getStoryUrl(`${TESTS_PREFIX}/${category}/${storyName}`, '2. Gradient');
-      const dataHook = 'story-page-gradient-header-content';
+
+      const storyUrl = createTestStoryUrl('2. Gradient');
+      const dataHook = 'story-page';
       runTestCases({storyUrl, dataHook});
     });
   });
@@ -81,13 +89,15 @@ describe('Page', async () => {
   describe('Header + FixedContent + Content', async () => {
 
     describe('With Background-Image', () => {
-      const dataHook = 'story-page-background-image-header-fixed-content-content';
-      runTestCases({dataHook});
+      const storyUrl = createTestStoryUrl('3. FC-Image');
+      const dataHook = 'story-page';
+      runTestCases({storyUrl, dataHook});
     });
 
     describe('With Gradient', () => {
-      const dataHook = 'story-page-gradient-header-fixed-content-content';
-      runTestCases({dataHook});
+      const storyUrl = createTestStoryUrl('3. FC-Gradient');
+      const dataHook = 'story-page';
+      runTestCases({storyUrl, dataHook});
     });
   });
 
