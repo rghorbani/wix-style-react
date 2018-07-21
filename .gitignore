@@ -9,6 +9,8 @@ coverage
 .history
 storybook-static
 storybook-e2e
+storybook-offline-assets
+.storybook-offline-config
 /.idea/
 *.iml
 .vscode
