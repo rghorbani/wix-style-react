@@ -1,4 +1,5 @@
 import {waitForVisibilityOf, flattenInternalDriver} from '../../test-common';
+import autoExampleDriver from 'wix-storybook-utils/AutoExampleDriver';
 
 /**
  * IMPORTANT !!!
@@ -39,13 +40,12 @@ function runFocusTestsImpl(driver, storyUrl) {
       expect(await driver.hasFocusVisibleState()).toBe(false, `${prefix}hasFocusVisibleState`);
     };
 
-    beforeEach(async () => {
-      // TODO: We do browser.get() before EACH test in order to reset the focus.
-      // implmement a generic solution in AutoExampleDriver that will do
-      // propper reset of the focus, so we don't have to get the page,
-      // and thus the test will run faster.
+    beforeAll(async () => {
       await browser.get(storyUrl);
       await waitForVisibilityOf(driver.element(), 'Cannot find element');
+    });
+    beforeEach(async () => {
+      autoExampleDriver.remount();
     });
 
     it('should not be focused [given] initial default', async () => {
