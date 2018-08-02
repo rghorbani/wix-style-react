@@ -5,7 +5,7 @@ import {runFocusTests} from '../common/Focusable/FocusableTestsE2E';
 
 const NO_DESCRIPTION = '';
 
-describe('Checkbox', () => {
+fdescribe('Checkbox', () => {
   const storyUrl = getStoryUrl('4. Selection', '4.2 Checkbox');
   const checkboxDriver = checkboxTestkitFactory({dataHook: 'storybook-checkbox'});
 
@@ -19,7 +19,7 @@ describe('Checkbox', () => {
       await waitForCheckbox();
     });
 
-    beforeEach(async () => {
+    afterEach(async () => {
       await autoExampleDriver.remount();
     });
 
@@ -37,7 +37,6 @@ describe('Checkbox', () => {
     });
 
     eyes.it('should show focused styles', async () => {
-
       expect(checkboxDriver.isFocused()).toBe(false);
       await clickTab();
       expect(checkboxDriver.isFocused()).toBe(true);
