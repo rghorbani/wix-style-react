@@ -4,6 +4,7 @@ import classNames from 'classnames';
 
 import Content from './Content';
 import Header from './Header';
+import Divider from './Divider';
 import LinkHeader from './LinkHeader';
 import ButtonHeader from './ButtonHeader';
 import CollapsedHeader from './CollapsedHeader';
@@ -35,6 +36,7 @@ Card.defaultProps = {
 
 Card.Content = Content;
 Card.Header = Header;
+Card.Divider = Divider;
 Card.LinkHeader = LinkHeader;
 Card.ButtonHeader = ButtonHeader;
 Card.CollapsedHeader = CollapsedHeader;
