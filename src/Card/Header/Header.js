@@ -4,8 +4,8 @@ import {bool, node} from 'prop-types';
 import Divider from '../Divider';
 import styles from './Header.scss';
 import WixComponent from '../../BaseComponents/WixComponent';
-import Heading from 'wix-style-react/Heading';
-import Text from 'wix-style-react/Text';
+import Heading from '../../Heading';
+import Text from '../../Text';
 
 const isString = a => typeof a === 'string';
 
