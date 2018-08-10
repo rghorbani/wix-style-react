@@ -8,18 +8,14 @@ class LinkHeader extends WixComponent {
   static displayName = 'Card.LinkHeader';
 
   static propTypes = {
-    title: node.isRequired,
+    ...Header.propTypes,
     linkTitle: string.isRequired,
     linkTo: string.isRequired,
-    subtitle: node,
-    tooltip: node,
-    withoutDivider: bool
+    tooltip: node
   };
 
   static defaultProps = {
-    subtitle: null,
-    tooltip: null,
-    withoutDivider: false
+    tooltip: null
   };
 
   render() {

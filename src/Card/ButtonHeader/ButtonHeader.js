@@ -32,8 +32,6 @@ class ButtonHeader extends WixComponent {
 
   static defaultProps = {
     withNewIcons: false,
-    subtitle: null,
-    withoutDivider: false,
     buttonPrefix: null,
     tooltip: null,
     theme: 'standard',
