@@ -17,18 +17,19 @@ class AddNewItem extends Component {
   state = {}
 
   render() {
-    const {dataHook} = this.props;
+    const {dataHook, text} = this.props;
     return (
       <div data-hook={dataHook}>
-        <Text
+        {text && <Text
           size="medium"
           skin="standard"
           tagName="span"
           weight="thin"
           dataHook="addnewitem-text"
           >
-          Some text
-       </Text>
+          {text}
+        </Text>
+        }
       </div>
     );
   }

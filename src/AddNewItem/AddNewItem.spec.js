@@ -10,8 +10,7 @@ const createDriver = createDriverFactory(addNewItemDriverFactory);
 import AddNewItem from './AddNewItem';
 
 describe.only('AddNewItem', () => {
-  const dataHook = 'data-hook';
-  const renderAddNewItem = (props = {}) => <AddNewItem {...props} dataHook={dataHook}/>;
+  const renderAddNewItem = (props = {}) => <AddNewItem {...props}/>;
 
   it('should have correct displayName', () => {
     const wrapper = mount(renderAddNewItem());
@@ -20,9 +19,14 @@ describe.only('AddNewItem', () => {
 
   describe('`text` prop', () => {
     const text = 'Add New Item';
-    it('when given should render Text component', () => {
+    it('should render text component', () => {
       const driver = createDriver(renderAddNewItem({text}));
       expect(driver.getText()).toEqual(text);
+    });
+
+    it('should not render text when `text` is undefined', () => {
+      const driver = createDriver(renderAddNewItem());
+      expect(driver.textExists()).toEqual(false);
     });
   });
 

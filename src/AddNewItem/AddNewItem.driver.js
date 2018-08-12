@@ -1,10 +1,12 @@
-import {textTestkitFactory} from 'wix-style-react/dist/testkit/enzyme';
+import textDriverFactory from '../Text/Text.driver';
 
 const addNewItemDriverFactory = ({wrapper, element}) => {
+  const byHook = hook => element.querySelector(`[data-hook*="${hook}"]`);
   return {
     exists: () => !!element,
     element: () => element,
-    getText: () => textTestkitFactory({wrapper: element, dataHook: 'addnewitem-text'}).getText()
+    getText: () => textDriverFactory({element: byHook('addnewitem-text')}).getText(),
+    textExists: () => textDriverFactory({element: byHook('addnewitem-text')}).exists()
   };
 };
 
