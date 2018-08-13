@@ -1,5 +1,5 @@
 import React from 'react';
-import {bool, node, string} from 'prop-types';
+import {node, string} from 'prop-types';
 import TextLink from '../../TextLink';
 import WixComponent from '../../../src/BaseComponents/WixComponent';
 import Header from '../Header';
