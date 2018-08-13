@@ -67,41 +67,40 @@ class CollapsedHeader extends WixComponent {
     }
   };
 
+  _toggleSwitchElement = () =>
+    <div onClick={this.stopPropagation}>
+      <ToggleSwitch
+        dataHook="switch"
+        onChange={this.onToggleChange}
+        checked={!this.state.isCollapsed}
+        />
+    </div>;
+
+  _buttonElement = () =>
+    <div onClick={this.stopPropagation}>
+      <Button
+        withNewIcons
+        dataHook="button"
+        height="medium"
+        prefixIcon={this.state.isCollapsed ? <ChevronDown/> : <ChevronUp/>}
+        onClick={this.onToggleChange}
+        theme="whiteblueprimary"
+        type="button"
+        >
+        {this.state.isCollapsed ? this.props.buttonExpandText : this.props.buttonCollapseText}
+      </Button>
+    </div>;
+
   render() {
     const {
       title,
       subtitle,
       children,
       withoutDivider,
-      buttonCollapseText,
-      buttonExpandText,
       toggleStyle
     } = this.props;
+
     const {isCollapsed} = this.state;
-
-    const switchElement =
-      (<div onClick={this.stopPropagation}>
-        <ToggleSwitch
-          dataHook="switch"
-          onChange={this.onToggleChange}
-          checked={!isCollapsed}
-          />
-      </div>);
-
-    const buttonElement =
-      (<div onClick={this.stopPropagation}>
-        <Button
-          withNewIcons
-          dataHook="button"
-          height="medium"
-          prefixIcon={isCollapsed ? <ChevronDown/> : <ChevronUp/>}
-          onClick={this.onToggleChange}
-          theme="whiteblueprimary"
-          type="button"
-          >
-          {isCollapsed ? buttonExpandText : buttonCollapseText}
-        </Button>
-      </div>);
 
     return (
       <div>
@@ -109,7 +108,7 @@ class CollapsedHeader extends WixComponent {
           <Header
             title={title}
             subtitle={subtitle}
-            suffix={toggleStyle === 'switch' ? switchElement : buttonElement}
+            suffix={toggleStyle === 'switch' ? this._toggleSwitchElement() : this._buttonElement()}
             withoutDivider={withoutDivider || isCollapsed}
             />
         </div>
