@@ -7,7 +7,6 @@ import Header from './Header';
 import LinkHeader from './LinkHeader';
 import ButtonHeader from './ButtonHeader';
 import CollapsedHeader from './CollapsedHeader';
-import EmptyState from './EmptyState';
 
 import styles from './Card.scss';
 
@@ -38,6 +37,5 @@ Card.Header = Header;
 Card.LinkHeader = LinkHeader;
 Card.ButtonHeader = ButtonHeader;
 Card.CollapsedHeader = CollapsedHeader;
-Card.EmptyState = EmptyState;
 
 export default Card;
