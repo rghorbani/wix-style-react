@@ -224,7 +224,7 @@ class Tooltip extends WixComponent {
           textAlign={this.props.textAlign}
           lineHeight={this.props.lineHeight}
           color={this.props.color}
-        >
+          >
           {this.props.content}
         </TooltipContent>);
 

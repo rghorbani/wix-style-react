@@ -443,12 +443,11 @@ describe('Tooltip', () => {
     });
   });
 
-  describe('regression tests', function () {
-
+  describe('regression tests', () => {
 
     it('should not throw an error when call "hide" method and then unmount', () => {
-      // Link to the issue https://github.com/wix/wix-style-react/issues/2113
-      const wrapper = mount(<div><Tooltip {..._props} appendToParent hideDelay={0}>{children}</Tooltip></div>, {
+      const dataHook = 'myDataHook';
+      const wrapper = mount(<div><Tooltip dataHook={dataHook} {..._props} appendToParent hideDelay={0}>{children}</Tooltip></div>, {
         attachTo: document.body.appendChild(document.createElement('div'))
       });
       const driver = enzymeTooltipTestkitFactory({wrapper, dataHook});
