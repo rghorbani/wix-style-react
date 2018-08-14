@@ -1,6 +1,5 @@
 import React from 'react';
 import {bool, func, node, oneOf, string} from 'prop-types';
-import classNames from 'classnames';
 
 import Button from '../../../src/Backoffice/Button';
 import WixComponent from '../../BaseComponents/WixComponent';

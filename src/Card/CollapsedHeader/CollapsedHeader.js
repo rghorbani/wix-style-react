@@ -2,7 +2,6 @@ import React from 'react';
 import {bool, node, oneOf, func, string} from 'prop-types';
 import Collapse from 'react-collapse';
 
-import classNames from 'classnames';
 import ToggleSwitch from '../../../src/ToggleSwitch';
 import WixComponent from '../../../src/BaseComponents/WixComponent';
 import Header from '../Header';
