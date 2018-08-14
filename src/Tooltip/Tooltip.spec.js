@@ -442,6 +442,44 @@ describe('Tooltip', () => {
       });
     });
   });
+
+  describe('regression tests', function () {
+
+
+    it('should not throw an error when call "hide" method and then unmount', () => {
+      // Link to the issue https://github.com/wix/wix-style-react/issues/2113
+      const wrapper = mount(<div><Tooltip {..._props} appendToParent hideDelay={0}>{children}</Tooltip></div>, {
+        attachTo: document.body.appendChild(document.createElement('div'))
+      });
+      const driver = enzymeTooltipTestkitFactory({wrapper, dataHook});
+      driver.mouseEnter();
+
+      return resolveIn(30).then(() => {
+        const tooltipComponent = wrapper.find(Tooltip).instance();
+
+        // we need to patch it due to _getContainer is using inside setTimeout
+        // and we can't catch an async err outside
+        const _getContainer = tooltipComponent._getContainer.bind(tooltipComponent);
+        let isError = false;
+        tooltipComponent._getContainer = () => {
+          try {
+            return _getContainer();
+          } catch (e) {
+            isError = true;
+          }
+        };
+
+        tooltipComponent.hide();
+        wrapper.unmount();
+
+        return resolveIn(10).then(() => {
+          expect(isError).toBeFalsy();
+
+          return resolveIn(10);
+        });
+      });
+    });
+  });
 });
 
 function resolveIn(timeout) {
