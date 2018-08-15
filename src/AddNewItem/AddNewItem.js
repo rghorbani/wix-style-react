@@ -1,19 +1,35 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 
 import Add from '../new-icons/Add';
 import Text from 'wix-style-react/Text';
-//import classnames from 'classnames';
+import styles from './AddNewItem.scss';
+
+const textWitElipsis = children => (
+  <div data-hook="text-with-ellipses">
+    <Text style={{color: '#3899ec'}} dataHook="addnewitem-text" elipsis>{children}</Text>
+  </div>
+);
 
 class AddNewItem extends Component {
+  constructor() {
+    super();
+    this.state = {
+      height: null
+    };
+    this.height = null;
+  }
   static displayName = 'AddNewItem';
   static propTypes = {
 
     children: PropTypes.oneOfType([PropTypes.node, PropTypes.func, PropTypes.string]),
 
-    elipsis: PropTypes.bool,
-
     disabled: PropTypes.bool,
+
+    theme: PropTypes.oneOf(['dashes', 'plain', 'filled']),
+
+    alignItems: PropTypes.oneOf(['center', 'right', 'left']),
 
     onClick: PropTypes.func,
     /** used for testing */
@@ -21,40 +37,39 @@ class AddNewItem extends Component {
   }
 
   static defaultProps = {
-    elipsis: false
+    theme: 'dashes',
+    alignItems: 'center'
   }
 
-  state = {}
-
-  checkElipsis = (children, elipsis) => {
-    if (elipsis) {
-      return (
-        <div data-hook="text-with-ellipses">
-          <Text dataHook="addnewitem-text" appearance="best" elipsis>{children}</Text>
-        </div>
-      );
-    } else {
-      return <Text dataHook="addnewitem-text" appearance="best">{children}</Text>;
+  componentDidMount() {
+    const {offsetHeight} = this.height;
+    if (offsetHeight) {
+      console.log(offsetHeight);
+      this.setState({height: offsetHeight});
     }
   }
 
   renderText = () => {
-    const {children, elipsis} = this.props;
+    const {children} = this.props;
     if (!children) {
       return null;
     }
     if (typeof children === 'string') {
-      return this.checkElipsis(children, elipsis);
+      return textWitElipsis(children);
     }
-    return <div data-hook="addnewitem-children">children</div>;
+    return <div data-hook="addnewitem-children">{children}</div>;
   }
 
   render() {
-    const {dataHook, onClick, disabled} = this.props;
+    const {dataHook, onClick, disabled, theme, alignItems} = this.props;
+    const {height} = this.state;
+    const heightStyle = height && height < 120 ? styles.row : null;
     return (
-      <div onClick={disabled ? null : onClick} data-hook={dataHook}>
-        <Add data-hook="addnewitem-icon"/>
-        {this.renderText()}
+      <div ref={x => this.height = x} className={classnames(styles[theme], styles[alignItems], disabled ? styles.disabled : '')} onClick={disabled ? null : onClick} data-hook={dataHook}>
+        <div className={classnames(heightStyle, styles.container)}>
+          <Add className={styles.icon} data-hook="addnewitem-icon"/>
+          {this.renderText()}
+        </div>
       </div>
     );
   }

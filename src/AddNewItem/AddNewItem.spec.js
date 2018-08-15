@@ -9,7 +9,7 @@ const createDriver = createDriverFactory(addNewItemDriverFactory);
 
 import AddNewItem from './AddNewItem';
 
-describe.only('AddNewItem', () => {
+describe('AddNewItem', () => {
   const renderAddNewItem = (props = {}) => <AddNewItem {...props}/>;
 
   it('should have correct displayName', () => {
@@ -33,19 +33,6 @@ describe.only('AddNewItem', () => {
     it('should not render text when children is undefined', () => {
       const driver = createDriver(renderAddNewItem());
       expect(driver.textExists()).toEqual(false);
-    });
-  });
-
-  describe('`elipsis` prop', () => {
-    const text = 'Add New Item';
-    it('should render elipsis wrapper when string children and elipsis prop are passed', () => {
-      const driver = createDriver(renderAddNewItem({children: text, elipsis: true}));
-      expect(driver.elipsisExists()).toEqual(true);
-    });
-
-    it('should not render elipsis wrapper when only string children is passed', () => {
-      const driver = createDriver(renderAddNewItem({children: text, elipsis: false}));
-      expect(driver.elipsisExists()).toEqual(false);
     });
   });
 

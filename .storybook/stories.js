@@ -120,6 +120,7 @@ import '../stories/Highlighter.story.js'; // Highlighter
 
 // Components section, WIP and similar
 import '../stories/FormField.story.js';
+import '../stories/AddNewItem/AddNewItem.story.js';
 import '../stories/Layout/index.story.js';
 import '../stories/Layout';
 
