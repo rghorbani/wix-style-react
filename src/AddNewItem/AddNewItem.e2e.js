@@ -25,19 +25,22 @@ describe('AddNewItem', () => {
     autoExampleDriver.reset();
   });
 
-  eyes.it(`should render 'alignItems' prop with value 'center' by default`, async () => {
-    await autoExampleDriver.setProps({alignItems: 'center'});
-    await createDriverFactory();
+  describe(`'alignItems'`, () => {
+    eyes.it(`should render with value 'center' by default`, async () => {
+      await autoExampleDriver.setProps();
+      await createDriverFactory();
+    });
+
+    eyes.it(`should render with value 'left'`, async () => {
+      await autoExampleDriver.setProps({alignItems: 'left'});
+      await createDriverFactory();
+    });
+
+    eyes.it(`should render with value 'right'`, async () => {
+      await autoExampleDriver.setProps({alignItems: 'right'});
+      await createDriverFactory();
+    });
   });
 
-  eyes.it(`should render 'alignItems' prop with value 'left'`, async () => {
-    await autoExampleDriver.setProps({alignItems: 'left'});
-    await createDriverFactory();
-  });
-
-  eyes.it(`should render 'alignItems' prop with value 'right'`, async () => {
-    await autoExampleDriver.setProps({alignItems: 'right'});
-    await createDriverFactory();
-  });
 
 });
