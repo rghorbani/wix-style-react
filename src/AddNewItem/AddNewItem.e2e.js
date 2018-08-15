@@ -25,9 +25,9 @@ describe('AddNewItem', () => {
     autoExampleDriver.reset();
   });
 
-  describe(`'alignItems'`, () => {
+  describe(`'alignItems' prop`, () => {
     eyes.it(`should render with value 'center' by default`, async () => {
-      await autoExampleDriver.setProps();
+      await autoExampleDriver.setProps({});
       await createDriverFactory();
     });
 
@@ -41,6 +41,24 @@ describe('AddNewItem', () => {
       await createDriverFactory();
     });
   });
+
+  describe(`'theme' prop`, () => {
+    eyes.it(`should render with value 'dashes' by default`, async () => {
+      await autoExampleDriver.setProps({});
+      await createDriverFactory();
+    });
+
+    eyes.it(`should render with value 'plain'`, async () => {
+      await autoExampleDriver.setProps({theme: 'plain'});
+      await createDriverFactory();
+    });
+
+    eyes.it(`should render with value 'filled'`, async () => {
+      await autoExampleDriver.setProps({theme: 'filled'});
+      await createDriverFactory();
+    });
+  });
+
 
 
 });

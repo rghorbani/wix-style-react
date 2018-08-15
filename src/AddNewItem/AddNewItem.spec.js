@@ -43,6 +43,13 @@ describe('AddNewItem', () => {
       driver.click();
       expect(onClick).toHaveBeenCalled();
     });
+
+    it('should not call onClick when prop is undefined', () => {
+      const onClick = jest.fn();
+      const driver = createDriver(renderAddNewItem());
+      driver.click();
+      expect(onClick).not.toHaveBeenCalled();
+    });
   });
 
   describe('`disable` prop ', () => {
