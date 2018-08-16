@@ -9,7 +9,7 @@ import {getHeightBreakpoint} from './_helpers/breakpointCalculator';
 
 const textWitElipsis = children => (
   <div data-hook="text-with-ellipses">
-    <Text style={{color: '#3899ec'}} dataHook="addnewitem-text" elipsis>{children}</Text>
+    <Text weight="thin" size="small" style={{color: '#3899ec'}} dataHook="addnewitem-text" elipsis>{children}</Text>
   </div>
 );
 
@@ -45,7 +45,6 @@ class AddNewItem extends Component {
   componentDidMount() {
     const {offsetHeight} = this.height;
     if (offsetHeight) {
-      console.log(offsetHeight);
       this.setState({height: offsetHeight});
     }
   }
