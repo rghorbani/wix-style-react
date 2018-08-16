@@ -11,7 +11,7 @@ const childrenExamples = [
     value: 'Add New Item'
   },
   {label: 'Text Component',
-    value: <Text appearance="best">Add New Item</Text>
+    value: <Text>Add New Item</Text>
   }
 ];
 

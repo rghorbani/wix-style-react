@@ -5,6 +5,7 @@ import classnames from 'classnames';
 import Add from '../new-icons/Add';
 import Text from 'wix-style-react/Text';
 import styles from './AddNewItem.scss';
+import {getHeightBreakpoint} from './_helpers/breakpointCalculator';
 
 const textWitElipsis = children => (
   <div data-hook="text-with-ellipses">
@@ -26,6 +27,8 @@ class AddNewItem extends Component {
     children: PropTypes.oneOfType([PropTypes.node, PropTypes.func, PropTypes.string]),
 
     disabled: PropTypes.bool,
+
+    className: PropTypes.string,
 
     theme: PropTypes.oneOf(['dashes', 'plain', 'filled']),
 
@@ -61,13 +64,13 @@ class AddNewItem extends Component {
   }
 
   render() {
-    const {dataHook, onClick, disabled, theme, alignItems} = this.props;
-    const {height} = this.state;
-    const heightStyle = height && height < 120 ? styles.row : null;
+    const {dataHook, onClick, disabled, theme, alignItems, className} = this.props;
+    const style = className ? className : styles;
+    const breakpoint = getHeightBreakpoint(this.state.height);
     return (
-      <div ref={x => this.height = x} className={classnames(styles[theme], styles[alignItems], disabled ? styles.disabled : '')} onClick={disabled ? null : onClick} data-hook={dataHook}>
-        <div className={classnames(heightStyle, styles.container)}>
-          <Add className={styles.icon} data-hook="addnewitem-icon"/>
+      <div ref={x => this.height = x} className={classnames(style.root, styles[breakpoint], style[theme], style[alignItems], disabled ? style.disabled : '')} onClick={disabled ? null : onClick} data-hook={dataHook}>
+        <div className={classnames(style.container)}>
+          <Add className={style.icon} data-hook="addnewitem-icon"/>
           {this.renderText()}
         </div>
       </div>
