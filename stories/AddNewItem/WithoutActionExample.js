@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 
-import {Container, Col, Row} from '../../src/Grid';
+import {Col, Row} from '../../src/Grid';
 import AddNewItem from '../../src/AddNewItem/AddNewItem';
 import PlaceHolder from '../assets/ImagePlaceholder';
 import Card from 'wix-style-react/Card';
@@ -32,18 +32,16 @@ const CenterElements = ({children}) => (
 );
 
 const WithoutActionExample = () => (
-  <Container>
-    <div style={{width: '600px', padding: '30px', background: '#F0F4F7'}}>
-      <Row stretchViewsVertically>
-        <Col span={6}>
-          <MockCard/>
-        </Col>
-        <Col span={6}>
-          <AddNewItem dataHook="add-without-action"/>
-        </Col>
-      </Row>
-    </div>
-  </Container>
+  <div style={{padding: '30px', background: '#F0F4F7'}}>
+    <Row stretchViewsVertically>
+      <Col span={6}>
+        <MockCard/>
+      </Col>
+      <Col span={6}>
+        <AddNewItem dataHook="add-without-action"/>
+      </Col>
+    </Row>
+  </div>
 );
 
 
