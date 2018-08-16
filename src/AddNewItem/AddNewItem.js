@@ -28,8 +28,6 @@ class AddNewItem extends Component {
 
     disabled: PropTypes.bool,
 
-    className: PropTypes.string,
-
     theme: PropTypes.oneOf(['dashes', 'plain', 'filled']),
 
     alignItems: PropTypes.oneOf(['center', 'right', 'left']),
@@ -64,8 +62,8 @@ class AddNewItem extends Component {
   }
 
   render() {
-    const {dataHook, onClick, disabled, theme, alignItems, className} = this.props;
-    const style = className ? className : styles;
+    const {dataHook, onClick, disabled, theme, alignItems} = this.props;
+    const style = styles;
     const breakpoint = getHeightBreakpoint(this.state.height);
     return (
       <div ref={x => this.height = x} className={classnames(style.root, styles[breakpoint], style[theme], style[alignItems], disabled ? style.disabled : '')} onClick={disabled ? null : onClick} data-hook={dataHook}>

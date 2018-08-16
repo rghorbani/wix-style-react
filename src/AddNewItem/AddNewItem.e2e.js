@@ -7,11 +7,9 @@ import {storySettings} from '../../stories/AddNewItem/storySettings';
 
 describe('AddNewItem', () => {
 
-  const storyUrl = createStoryUrl({kind: storySettings.kind, story: storySettings.storyName, withExamples: false});
+  const storyUrl = createStoryUrl({kind: storySettings.kind, story: storySettings.storyName, withExamples: true});
 
-  const createDriverFactory = async () => {
-    const driver = addNewItemTestkitFactory({dataHook: storySettings.dataHook});
-
+  const createDriverFactory = async driver => {
     await waitForVisibilityOf(driver.element(), 'Cannot find AddNewItem component');
     await scrollToElement(driver.element());
     return driver;
@@ -28,37 +26,66 @@ describe('AddNewItem', () => {
   describe(`'alignItems' prop`, () => {
     eyes.it(`should render with value 'center' by default`, async () => {
       await autoExampleDriver.setProps({});
-      await createDriverFactory();
+      const driver = addNewItemTestkitFactory({dataHook: storySettings.dataHook});
+      await createDriverFactory(driver);
     });
 
     eyes.it(`should render with value 'left'`, async () => {
       await autoExampleDriver.setProps({alignItems: 'left'});
-      await createDriverFactory();
+      const driver = addNewItemTestkitFactory({dataHook: storySettings.dataHook});
+      await createDriverFactory(driver);
     });
 
     eyes.it(`should render with value 'right'`, async () => {
       await autoExampleDriver.setProps({alignItems: 'right'});
-      await createDriverFactory();
+      const driver = addNewItemTestkitFactory({dataHook: storySettings.dataHook});
+      await createDriverFactory(driver);
     });
   });
 
   describe(`'theme' prop`, () => {
     eyes.it(`should render with value 'dashes' by default`, async () => {
       await autoExampleDriver.setProps({});
-      await createDriverFactory();
+      const driver = addNewItemTestkitFactory({dataHook: storySettings.dataHook});
+      await createDriverFactory(driver);
     });
 
     eyes.it(`should render with value 'plain'`, async () => {
       await autoExampleDriver.setProps({theme: 'plain'});
-      await createDriverFactory();
+      const driver = addNewItemTestkitFactory({dataHook: storySettings.dataHook});
+      await createDriverFactory(driver);
     });
 
     eyes.it(`should render with value 'filled'`, async () => {
       await autoExampleDriver.setProps({theme: 'filled'});
-      await createDriverFactory();
+      const driver = addNewItemTestkitFactory({dataHook: storySettings.dataHook});
+      await createDriverFactory(driver);
     });
   });
 
+  describe(`Breakpoints`, () => {
+    eyes.it(`should render with large icon when height > 212`, async () => {
+      await autoExampleDriver.setProps({});
+      const driver = addNewItemTestkitFactory({dataHook: 'addItem-large'});
+      await createDriverFactory(driver);
+    });
 
+    eyes.it(`should render with large icon when height > 162`, async () => {
+      await autoExampleDriver.setProps({});
+      const driver = addNewItemTestkitFactory({dataHook: 'addItem-medium'});
+      await createDriverFactory(driver);
+    });
 
+    eyes.it(`should render with large icon when height > 120`, async () => {
+      await autoExampleDriver.setProps({});
+      const driver = addNewItemTestkitFactory({dataHook: 'addItem-small'});
+      await createDriverFactory(driver);
+    });
+
+    eyes.it(`should render with large icon when height > 42`, async () => {
+      await autoExampleDriver.setProps({});
+      const driver = addNewItemTestkitFactory({dataHook: 'addItem-tiny'});
+      await createDriverFactory(driver);
+    });
+  });
 });
