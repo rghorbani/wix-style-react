@@ -122,6 +122,7 @@ import '../stories/Highlighter.story.js'; // Highlighter
 import '../stories/FormField.story.js';
 import '../stories/Layout/index.story.js';
 import '../stories/Layout';
+import '../stories/SortableList/index.story.js';
 
 // TPA
 import '../stories/TPA/Button';
