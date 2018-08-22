@@ -442,43 +442,6 @@ describe('Tooltip', () => {
       });
     });
   });
-
-  describe('regression tests', () => {
-
-    it('should not throw an error when call "hide" method and then unmount', () => {
-      const dataHook = 'myDataHook';
-      const wrapper = mount(<div><Tooltip dataHook={dataHook} {..._props} appendToParent hideDelay={0}>{children}</Tooltip></div>, {
-        attachTo: document.body.appendChild(document.createElement('div'))
-      });
-      const driver = enzymeTooltipTestkitFactory({wrapper, dataHook});
-      driver.mouseEnter();
-
-      return resolveIn(30).then(() => {
-        const tooltipComponent = wrapper.find(Tooltip).instance();
-
-        // we need to patch it due to _getContainer is using inside setTimeout
-        // and we can't catch an async err outside
-        const _getContainer = tooltipComponent._getContainer.bind(tooltipComponent);
-        let isError = false;
-        tooltipComponent._getContainer = () => {
-          try {
-            return _getContainer();
-          } catch (e) {
-            isError = true;
-          }
-        };
-
-        tooltipComponent.hide();
-        wrapper.unmount();
-
-        return resolveIn(10).then(() => {
-          expect(isError).toBeFalsy();
-
-          return resolveIn(10);
-        });
-      });
-    });
-  });
 });
 
 function resolveIn(timeout) {

@@ -24,8 +24,6 @@ describe('PopoverMenu', () => {
     browser.get(storyUrl);
   });
 
-  afterEach(() => logs.verify());
-
   it('should show popover menu', () => {
     waitForVisibilityOf(driver.element(), 'Can not find PopoverMenu trigger element').then(() => {
       driver.click();
@@ -78,7 +76,14 @@ describe('PopoverMenu', () => {
         'PopoverMenu has not been removed after menu item click',
       );
 
-      return logs.expect(/Uncaught TypeError: Cannot read property 'parentElement' of null/);
+      logs.expect(/Uncaught TypeError: Cannot read property 'parentElement' of null/);
+      await logs.verify()
+        .then(() => {
+          fail('Expected error occurred');
+        })
+        .catch((e) => {
+          expect(e.message).toContain('NO MESSAGE TO EXPECT');
+        });
     });
   });
 });
