@@ -17,7 +17,7 @@ describe('AddNewItem', () => {
 
   it('should have correct displayName', () => {
     const wrapper = mount(renderAddNewItem());
-    expect(wrapper.name()).toEqual('AddNewItem');
+    expect(wrapper.name()).toEqual('WithFocusable(AddNewItem)');
   });
 
   describe('`children` prop', () => {

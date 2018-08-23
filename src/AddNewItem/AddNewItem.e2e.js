@@ -7,7 +7,7 @@ import {storySettings} from '../../stories/AddNewItem/storySettings';
 
 describe('AddNewItem', () => {
 
-  const storyUrl = createStoryUrl({kind: storySettings.kind, story: storySettings.storyName, withExamples: true});
+  const storyUrl = createStoryUrl({kind: storySettings.kind, story: storySettings.storyName});
 
   const createDriverFactory = async driver => {
     await waitForVisibilityOf(driver.element(), 'Cannot find AddNewItem component');
@@ -69,28 +69,54 @@ describe('AddNewItem', () => {
     });
   });
 
-  describe(`Breakpoints`, () => {
+  describe(`'size' prop`, () => {
     eyes.it(`should render with large icon`, async () => {
-      await autoExampleDriver.setProps({});
-      const driver = addNewItemTestkitFactory({dataHook: 'additem-large'});
+      await autoExampleDriver.setProps({size: 'large'});
+      const driver = addNewItemTestkitFactory({dataHook: storySettings.dataHook});
       await createDriverFactory(driver);
     });
 
     eyes.it(`should render with mediumn icon`, async () => {
-      await autoExampleDriver.setProps({});
-      const driver = addNewItemTestkitFactory({dataHook: 'additem-medium'});
+      await autoExampleDriver.setProps({size: 'medium'});
+      const driver = addNewItemTestkitFactory({dataHook: storySettings.dataHook});
       await createDriverFactory(driver);
     });
 
     eyes.it(`should render with small icon`, async () => {
-      await autoExampleDriver.setProps({});
-      const driver = addNewItemTestkitFactory({dataHook: 'additem-small'});
+      await autoExampleDriver.setProps({size: 'small'});
+      const driver = addNewItemTestkitFactory({dataHook: storySettings.dataHook});
       await createDriverFactory(driver);
     });
 
     eyes.it(`should render with tiny icon`, async () => {
-      await autoExampleDriver.setProps({});
-      const driver = addNewItemTestkitFactory({dataHook: 'additem-tiny'});
+      await autoExampleDriver.setProps({size: 'tiny'});
+      const driver = addNewItemTestkitFactory({dataHook: storySettings.dataHook});
+      await createDriverFactory(driver);
+    });
+  });
+
+  describe(`'disable' prop`, () => {
+    eyes.it(`should render with theme dashes`, async () => {
+      await autoExampleDriver.setProps({disabled: true});
+      const driver = addNewItemTestkitFactory({dataHook: storySettings.dataHook});
+      await createDriverFactory(driver);
+    });
+
+    eyes.it(`should render with theme filled`, async () => {
+      await autoExampleDriver.setProps({disabled: true, theme: 'filled'});
+      const driver = addNewItemTestkitFactory({dataHook: storySettings.dataHook});
+      await createDriverFactory(driver);
+    });
+
+    eyes.it(`should render with theme plain`, async () => {
+      await autoExampleDriver.setProps({disabled: true, theme: 'plain'});
+      const driver = addNewItemTestkitFactory({dataHook: storySettings.dataHook});
+      await createDriverFactory(driver);
+    });
+
+    eyes.it(`should not apply any style with theme image`, async () => {
+      await autoExampleDriver.setProps({disable: true, theme: 'image'});
+      const driver = addNewItemTestkitFactory({dataHook: storySettings.dataHook});
       await createDriverFactory(driver);
     });
   });

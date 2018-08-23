@@ -33,7 +33,7 @@ const CenterElements = ({children}) => (
 
 const VerticalExample = () => (
 
-  <div style={{width: '400px', padding: '30px', background: '#F0F4F7'}}>
+  <div style={{width: '450px', padding: '30px', background: '#F0F4F7'}}>
     <Row stretchViewsVertically>
       <Col span={6}>
         <MockCard/>

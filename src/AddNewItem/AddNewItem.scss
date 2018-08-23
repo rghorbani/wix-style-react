@@ -19,7 +19,7 @@
   color: $B10;
 }
 
-.content {
+.column {
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
@@ -91,13 +91,6 @@
   border-style: dashed;
   border-radius: 3px;
 }
-
-
-
-
-
-
-
 
 
 .disabled {

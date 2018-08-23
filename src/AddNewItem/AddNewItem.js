@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
+import {withFocusable, focusableStates} from '../common/Focusable';
 import AddItemLarge from 'wix-ui-icons-common/system/AddItemLarge';
 import AddItemMedium from 'wix-ui-icons-common/system/AddItemMedium';
 import AddItemSmall from 'wix-ui-icons-common/system/AddItemSmall';
@@ -22,6 +23,7 @@ class AddNewItem extends Component {
   static displayName = 'AddNewItem';
   static propTypes = {
 
+     /** Any component or string */
     children: PropTypes.oneOfType([PropTypes.node, PropTypes.func, PropTypes.string]),
 
     /** Apply disabled styles */
@@ -30,12 +32,15 @@ class AddNewItem extends Component {
     /** The theme of component */
     theme: PropTypes.oneOf(['dashes', 'plain', 'filled', 'image']),
 
+     /** Switching content alignment  */
     alignItems: PropTypes.oneOf(['center', 'right', 'left']),
 
     /** Size to control icon and spacing  */
     size: PropTypes.oneOf(['large', 'medium', 'small', 'tiny']),
 
+     /** Click event handler  */
     onClick: PropTypes.func,
+
     /** used for testing */
     dataHook: PropTypes.string
   }
@@ -68,11 +73,16 @@ class AddNewItem extends Component {
   render() {
     const {dataHook, onClick, disabled, theme, alignItems, size} = this.props;
     const tiny = size === 'tiny';
-    const root = classnames(styles.root, {[styles.wrapped]: theme === 'image'});
-    const box = classnames(styles.box, styles[theme], styles[alignItems], {[styles.disabled]: disabled});
-    const content = classnames({[styles.content]: !tiny}, {[styles.list]: tiny});
+    const root = classnames(styles.root, {[styles.wrapped]: theme === 'image'}, {[styles.disabled]: disabled});
+    const box = classnames(styles.box, styles[theme], styles[alignItems]);
+    const content = classnames({[styles.column]: !tiny}, {[styles.list]: tiny});
     return (
-      <div className={root} data-hook={dataHook} onClick={disabled ? null : onClick} >
+      <div
+        className={root}
+        data-hook={dataHook}
+        onClick={disabled ? null : onClick}
+        {...focusableStates(this.props)}
+        >
         <div className={box}>
           <div className={content}>
             {this.renderIcon()}
@@ -83,4 +93,4 @@ class AddNewItem extends Component {
     );
   }
 }
-export default AddNewItem;
+export default withFocusable(AddNewItem);
