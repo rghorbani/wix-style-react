@@ -39,7 +39,7 @@ const VerticalExample = () => (
         <MockCard/>
       </Col>
       <Col span={6}>
-        <AddNewItem dataHook="add-as-card">Add New Staff Member</AddNewItem>
+        <AddNewItem dataHook="add-as-card" size="medium">Add New Staff Member</AddNewItem>
       </Col>
     </Row>
   </div>

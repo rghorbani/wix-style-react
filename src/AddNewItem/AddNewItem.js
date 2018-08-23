@@ -2,23 +2,14 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-
-import Text from 'wix-style-react/Text';
-
-
 import AddItemLarge from 'wix-ui-icons-common/system/AddItemLarge';
 import AddItemMedium from 'wix-ui-icons-common/system/AddItemMedium';
 import AddItemSmall from 'wix-ui-icons-common/system/AddItemSmall';
 import Add from '../new-icons/Add';
+import ActionText from './components/ActionText';
 
 import styles from './AddNewItem.scss';
 
-
-const textWitElipsis = (children, disabled) => (
-  <div data-hook="text-with-ellipses">
-    <Text weight="thin" size="small" style={{color: disabled ? '#CBD3DC' : '#3899ec'}} dataHook="additem-text" elipsis>{children}</Text>
-  </div>
-);
 
 const ICON_SIZES = {
   large: <AddItemLarge data-hook="additem-icon"/>,
@@ -51,7 +42,7 @@ class AddNewItem extends Component {
 
   static defaultProps = {
     theme: 'dashes',
-    size: 'small',
+    size: 'tiny',
     alignItems: 'center'
   }
 
@@ -61,13 +52,14 @@ class AddNewItem extends Component {
   }
 
   renderText = () => {
-    const {children, disabled, theme} = this.props;
+    const {children, disabled, theme, size} = this.props;
     const image = theme === 'image';
     switch (typeof children) {
       case undefined:
         return null;
       case 'string':
-        return image ? null : textWitElipsis(children, disabled);
+        return image ? null :
+        <ActionText disabled={disabled} size={size}>{children}</ActionText>;
       default:
         return image ? null : children;
     }

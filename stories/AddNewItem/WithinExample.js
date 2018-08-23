@@ -43,17 +43,7 @@ const WithinExample = ({theme, title}) => (
       <Card.Header title={title}/>
       <Card.Content>
         <Row>
-          <CardRow>
-          Address
-        </CardRow>
-        </Row>
-        <Row>
-          <CardRow>
-          Im bringing a plus one
-        </CardRow>
-        </Row>
-        <Row>
-          <AddNewItem dataHook="add-as-card" theme={theme}>
+          <AddNewItem dataHook="add-as-card" theme={theme} size="tiny">
           Add New Item
           </AddNewItem>
         </Row>

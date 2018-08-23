@@ -70,27 +70,27 @@ describe('AddNewItem', () => {
   });
 
   describe(`Breakpoints`, () => {
-    eyes.it(`should render with large icon when height > 212`, async () => {
+    eyes.it(`should render with large icon`, async () => {
       await autoExampleDriver.setProps({});
-      const driver = addNewItemTestkitFactory({dataHook: 'addItem-large'});
+      const driver = addNewItemTestkitFactory({dataHook: 'additem-large'});
       await createDriverFactory(driver);
     });
 
-    eyes.it(`should render with large icon when height > 162`, async () => {
+    eyes.it(`should render with mediumn icon`, async () => {
       await autoExampleDriver.setProps({});
-      const driver = addNewItemTestkitFactory({dataHook: 'addItem-medium'});
+      const driver = addNewItemTestkitFactory({dataHook: 'additem-medium'});
       await createDriverFactory(driver);
     });
 
-    eyes.it(`should render with large icon when height > 120`, async () => {
+    eyes.it(`should render with small icon`, async () => {
       await autoExampleDriver.setProps({});
-      const driver = addNewItemTestkitFactory({dataHook: 'addItem-small'});
+      const driver = addNewItemTestkitFactory({dataHook: 'additem-small'});
       await createDriverFactory(driver);
     });
 
-    eyes.it(`should render with large icon when height > 42`, async () => {
+    eyes.it(`should render with tiny icon`, async () => {
       await autoExampleDriver.setProps({});
-      const driver = addNewItemTestkitFactory({dataHook: 'addItem-tiny'});
+      const driver = addNewItemTestkitFactory({dataHook: 'additem-tiny'});
       await createDriverFactory(driver);
     });
   });

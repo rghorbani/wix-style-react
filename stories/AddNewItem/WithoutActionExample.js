@@ -38,7 +38,7 @@ const WithoutActionExample = () => (
         <MockCard/>
       </Col>
       <Col span={6}>
-        <AddNewItem dataHook="add-without-action"/>
+        <AddNewItem dataHook="add-without-action" size="medium"/>
       </Col>
     </Row>
   </div>

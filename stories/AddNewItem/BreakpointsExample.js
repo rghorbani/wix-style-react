@@ -11,28 +11,28 @@ const BreakpointsExample = () => (
       <Row stretchViewsVertically>
         <Col span={3}>
           <div style={{height: '240px'}}>
-            <AddNewItem dataHook="addItem-large">
+            <AddNewItem dataHook="additem-large" size="large">
             Add New Item
             </AddNewItem>
           </div>
         </Col>
         <Col span={3}>
           <div style={{height: '200px'}}>
-            <AddNewItem dataHook="addItem-medium">
+            <AddNewItem dataHook="additem-medium" size="medium">
               Add New Item
             </AddNewItem>
           </div>
         </Col>
         <Col span={3}>
           <div style={{height: '130px'}}>
-            <AddNewItem dataHook="addItem-small">
+            <AddNewItem dataHook="additem-small" size="small">
             Add New Item
             </AddNewItem>
           </div>
         </Col>
         <Col span={3}>
           <div style={{height: '55px'}}>
-            <AddNewItem dataHook="addItem-tiny">
+            <AddNewItem dataHook="additem-tiny" size="tiny">
             Add New Item
             </AddNewItem>
           </div>
