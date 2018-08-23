@@ -61,6 +61,12 @@ describe('AddNewItem', () => {
       const driver = addNewItemTestkitFactory({dataHook: storySettings.dataHook});
       await createDriverFactory(driver);
     });
+
+    eyes.it(`should render with value 'image'`, async () => {
+      await autoExampleDriver.setProps({theme: 'image'});
+      const driver = addNewItemTestkitFactory({dataHook: storySettings.dataHook});
+      await createDriverFactory(driver);
+    });
   });
 
   describe(`Breakpoints`, () => {

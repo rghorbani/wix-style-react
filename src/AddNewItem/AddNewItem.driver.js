@@ -5,11 +5,8 @@ const addNewItemDriverFactory = ({element, eventTrigger}) => {
   return {
     exists: () => !!element,
     element: () => element,
-    getText: () => textDriverFactory({element: byHook('addnewitem-text')}).getText(),
-    textExists: () => textDriverFactory({element: byHook('addnewitem-text')}).exists(),
-    elipsisExists: () => !!byHook('text-with-ellipses'),
-    getChildren: () => !!byHook('addnewitem-children'),
-    iconExists: () => !!byHook('addnewitem-icon'),
+    getText: () => textDriverFactory({element: byHook('additem-text')}).getText(),
+    textExists: () => textDriverFactory({element: byHook('additem-text')}).exists(),
     click: () => eventTrigger.click(element)
   };
 };

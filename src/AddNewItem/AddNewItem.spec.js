@@ -1,9 +1,12 @@
 import React from 'react';
 import {mount} from 'enzyme';
 
-
+import {isTestkitExists, isEnzymeTestkitExists} from '../../test/utils/testkit-sanity';
 import {createDriverFactory} from 'wix-ui-test-utils/driver-factory';
 import addNewItemDriverFactory from './AddNewItem.driver';
+
+import {addNewItemTestkitFactory} from '../../testkit';
+import {addNewItemTestkitFactory as enzymeAddNewItemTestkitFactory} from '../../testkit/enzyme';
 
 const createDriver = createDriverFactory(addNewItemDriverFactory);
 
@@ -19,20 +22,31 @@ describe('AddNewItem', () => {
 
   describe('`children` prop', () => {
     const text = 'Add New Item';
+    const child = <div data-hook="child">Hello</div>;
     it('should render text component when string is passed', () => {
       const driver = createDriver(renderAddNewItem({children: text}));
       expect(driver.getText()).toEqual(text);
     });
 
-    it('should render passed children component when passed', () => {
-      const Children = () => <div>Hello</div>;
-      const driver = createDriver(renderAddNewItem({children: Children}));
-      expect(driver.getChildren()).toEqual(true);
+    it('should render children as component', () => {
+      const wrapper = mount(renderAddNewItem({children: child}));
+      expect(wrapper.find(`[data-hook*="child"]`).exists()).toEqual(true);
     });
 
     it('should not render text when children is undefined', () => {
       const driver = createDriver(renderAddNewItem());
       expect(driver.textExists()).toEqual(false);
+    });
+
+
+    it('should not render children as string when theme is `image`', () => {
+      const driver = createDriver(renderAddNewItem({children: text, theme: 'image'}));
+      expect(driver.textExists()).toEqual(false);
+    });
+
+    it('should not render children as component when theme is `image`', () => {
+      const wrapper = mount(renderAddNewItem({children: child, theme: 'image'}));
+      expect(wrapper.find(`[data-hook*="child"]`).exists()).toEqual(false);
     });
   });
 
@@ -61,10 +75,20 @@ describe('AddNewItem', () => {
     });
   });
 
-  describe('Add icon svg', () => {
+  describe('Icon svg', () => {
     it('should render', () => {
-      const driver = createDriver(renderAddNewItem());
-      expect(driver.iconExists()).toEqual(true);
+      const wrapper = mount(renderAddNewItem());
+      expect(wrapper.find(`[data-hook*="additem-icon"]`).exists()).toEqual(true);
+    });
+  });
+
+  describe.skip('testkits', () => {
+    it('should exist', () => {
+      expect(isTestkitExists(renderAddNewItem(), addNewItemTestkitFactory)).toBe(true);
+    });
+
+    it('should exist for enzyme', () => {
+      expect(isEnzymeTestkitExists(renderAddNewItem(), enzymeAddNewItemTestkitFactory, mount)).toBe(true);
     });
   });
 

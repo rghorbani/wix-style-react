@@ -1,9 +1,14 @@
 @import '../common.scss';
 
 .root {
-  display: flex;
   height: 100%;
   width: 100%;
+}
+
+.box {
+  height: 100%;
+  width: 100%;
+  display: flex;
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
@@ -14,51 +19,35 @@
   color: $B10;
 }
 
-.tiny {
-  .container {
-    flex-direction: row;
-    font-size: 12px;
-  }
-  .icon {
-    width: 23px;
-    height: 23px;
-  }
-}   
-
-.small {
-  .icon {
-    width: 47px;
-    height: 47px;
-  }
-}
-  
-.medium {
-  .icon {
-    width: 63px;
-    height: 63px;
-  }
-}
-
-.large {
-  .icon {
-    width: 76px;
-    height: 76px;
-  } 
-}
-
-.container {
+.content {
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
   align-items: center;
   justify-content:center;
   color:inherit;
+}
 
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: center;
+  justify-content:center;
+}
 
+.wrapped {
+    padding: 12px;
+    background-color: $B50;
+    transition: background .2s linear;
+
+    &:hover {
+      background-color: $B40;
+    }
 }
 
 .plain {
-  background-color: #ffffff;
+  background-color: $paletteD6;
 
   &:hover {
     background-color: $B40;
@@ -71,11 +60,10 @@
 
 .dashes {
   box-sizing: border-box;
-  background-color: rgba(255, 255, 255, 0.48);
   border: solid 1px $B20;
   border-style: dashed;
   border-radius: 8px;
-  
+  background-color: $S50;
   &:hover {
     background-color: $B40;
   }
@@ -98,6 +86,39 @@
   }
 }
 
+.image {
+  box-sizing: border-box;
+  border: solid 1px $B20;
+  border-style: dashed;
+  border-radius: 3px;
+}
+
+
+
+
+
+
+
+
+
+.disabled {
+  .dashes {
+    background-color: $S50;
+    color:$D55;
+    border: solid 1px $D55;
+    border-style:dashed;
+  }
+
+  .plain {
+    background-color: $S50;
+    color:$D55;
+  }
+
+  .filled {
+    background-color: $S50;
+    color:$D55;
+  }
+}
 
 .left {
   align-items: center;
@@ -113,11 +134,4 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-}
-
-.disabled {
-  background-color: rgba(255, 255, 255, 0.48);
-  color:$D55;
-  border: solid 1px #cbd3dc;
-  border-style:dashed;
 }

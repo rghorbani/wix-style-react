@@ -6,6 +6,7 @@ import Text from '../../src/Text';
 import VerticalExample from './VerticalExample';
 import WithoutActionExample from './WithoutActionExample';
 import BreakpointsExample from './BreakpointsExample';
+import WithinExample from './WithinExample';
 import {Container, Col, Row} from '../../src/Grid';
 
 import {storySettings} from './storySettings';
@@ -15,12 +16,12 @@ const Cards = (
   <Container>
     <Row>
       <Col span={5}>
-        <CodeExample title="Add as a vertical card" code="">
+        <CodeExample title="Add item as a vertical card" code="">
           <VerticalExample/>
         </CodeExample>
       </Col>
       <Col span={7} >
-        <CodeExample title="Add without action text" code="">
+        <CodeExample title="Add item without action text" code="">
           <WithoutActionExample/>
         </CodeExample>
       </Col>
@@ -32,6 +33,23 @@ const Breakpoints = (
   <CodeExample title="Breakpoints" code="">
     <BreakpointsExample/>
   </CodeExample>
+);
+
+const Within = (
+  <Container>
+    <Row>
+      <Col span={6}>
+        <CodeExample title="Add item within a card" code="">
+          <WithinExample theme="dashes" title="Sections in Menu"/>
+        </CodeExample>
+      </Col>
+      <Col span={6} >
+        <CodeExample title="Add item within a card" code="">
+          <WithinExample theme="plain" title="Sections in Menu"/>
+        </CodeExample>
+      </Col>
+    </Row>
+  </Container>
 );
 
 const childrenExamples = [
@@ -60,7 +78,6 @@ export default {
     children: childrenExamples
   },
 
-  examples: [
-    Cards, Breakpoints]
+  examples: [Cards, Within, Breakpoints]
 
 };
