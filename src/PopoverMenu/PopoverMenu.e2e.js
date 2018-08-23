@@ -58,11 +58,11 @@ describe('PopoverMenu', () => {
 
       await waitForVisibilityOf(driver.element());
 
-      driver.click();
+      await driver.click();
 
       await waitForVisibilityOf(driver.menu.element());
 
-      driver.menu.clickItemAt(0);
+      await driver.menu.clickItemAt(0);
 
       await browser.wait(
         EC.stalenessOf(driver.menu.element()),
