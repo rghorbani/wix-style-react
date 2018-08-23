@@ -81,7 +81,7 @@ describe('PopoverMenu', () => {
         .then(() => {
           fail('Expected error occurred');
         })
-        .catch((e) => {
+        .catch(e => {
           expect(e.message).toContain('NO MESSAGE TO EXPECT');
         });
     });
