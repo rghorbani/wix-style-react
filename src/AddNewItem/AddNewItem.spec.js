@@ -1,9 +1,11 @@
 import React from 'react';
 import {mount} from 'enzyme';
 
+import {resolveIn} from '../../test/utils';
 import {isTestkitExists, isEnzymeTestkitExists} from '../../test/utils/testkit-sanity';
 import {createDriverFactory} from 'wix-ui-test-utils/driver-factory';
 import addNewItemDriverFactory from './AddNewItem.driver';
+import tooltipDriverFactory from '../Tooltip/Tooltip.driver';
 
 import {addNewItemTestkitFactory} from '../../testkit';
 import {addNewItemTestkitFactory as enzymeAddNewItemTestkitFactory} from '../../testkit/enzyme';
@@ -12,8 +14,9 @@ const createDriver = createDriverFactory(addNewItemDriverFactory);
 
 import AddNewItem from './AddNewItem';
 
-describe('AddNewItem', () => {
+describe.only('AddNewItem', () => {
   const renderAddNewItem = (props = {}) => <AddNewItem {...props}/>;
+  const byHook = hook => element.querySelector(`[data-hook*="${hook}"]`);
 
   it('should have correct displayName', () => {
     const wrapper = mount(renderAddNewItem());
@@ -81,6 +84,23 @@ describe('AddNewItem', () => {
       expect(wrapper.find(`[data-hook*="additem-icon"]`).exists()).toEqual(true);
     });
   });
+
+  describe('Tooltip', () => {
+    const tooltipContent = 'I am ToolTip';
+    it(`should render tooltip with given tooltip content`, () => {
+      const driver = createDriver(renderAddNewItem({tooltipContent}));
+      const TooltipDriver = driver.getTooltipDriver();
+      TooltipDriver.mouseEnter();
+      return resolveIn(50)
+        .then(() => {
+          expect(TooltipDriver.isShown()).toBeTruthy();
+          expect(TooltipDriver.getContent()).toEqual(tooltipContent);
+        });
+    });
+  });
+
+
+
 
   describe.skip('testkits', () => {
     it('should exist', () => {

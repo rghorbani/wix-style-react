@@ -8,6 +8,7 @@ import AddItemMedium from 'wix-ui-icons-common/system/AddItemMedium';
 import AddItemSmall from 'wix-ui-icons-common/system/AddItemSmall';
 import Add from '../new-icons/Add';
 import ActionText from './components/ActionText';
+import Tooltip from '../Tooltip';
 
 import styles from './AddNewItem.scss';
 
@@ -17,6 +18,14 @@ const ICON_SIZES = {
   medium: <AddItemMedium data-hook="additem-icon"/>,
   small: <AddItemSmall data-hook="additem-icon"/>,
   tiny: <Add data-hook="additem-icon" width="26" height="26"/>
+};
+
+const DEFAULT_TOOLTIP_PROPS = {
+  showDelay: 0,
+  hideDelay: 0,
+  theme: 'dark',
+  align: 'center',
+  placement: 'top'
 };
 
 class AddNewItem extends Component {
@@ -42,7 +51,13 @@ class AddNewItem extends Component {
     onClick: PropTypes.func,
 
     /** used for testing */
-    dataHook: PropTypes.string
+    dataHook: PropTypes.string,
+
+      /** Tooltip props, leave undefined for no tooltip */
+    tooltipProps: PropTypes.shape(Tooltip.propTypes),
+
+    /** Content of the tooltip, leave undefined for no tooltip */
+    tooltipContent: PropTypes.string
   }
 
   static defaultProps = {
@@ -70,12 +85,32 @@ class AddNewItem extends Component {
     }
   }
 
-  render() {
-    const {dataHook, onClick, disabled, theme, alignItems, size} = this.props;
+  renderContent = () => {
+    const {tooltipContent, theme, alignItems, size} = this.props;
     const tiny = size === 'tiny';
-    const root = classnames(styles.root, {[styles.wrapped]: theme === 'image'}, {[styles.disabled]: disabled});
     const box = classnames(styles.box, styles[theme], styles[alignItems]);
-    const content = classnames({[styles.column]: !tiny}, {[styles.list]: tiny});
+    const content = classnames({[styles.column]: !tiny}, {[styles.row]: tiny});
+    const container = (
+      <div className={box}>
+        <div className={content}>
+          {this.renderIcon()}
+          {this.renderText()}
+        </div>
+      </div>
+    );
+    const tooltipProps = {
+      ...DEFAULT_TOOLTIP_PROPS,
+      content: tooltipContent,
+      ...this.props.tooltipProps
+    };
+    return tooltipContent ? (
+      <Tooltip dataHook="additem-tooltip" {...tooltipProps}>
+        {container}</Tooltip>) : container;
+  }
+
+  render() {
+    const {dataHook, onClick, disabled, theme} = this.props;
+    const root = classnames(styles.root, {[styles.wrapped]: theme === 'image'}, {[styles.disabled]: disabled});
     return (
       <div
         className={root}
@@ -83,12 +118,7 @@ class AddNewItem extends Component {
         onClick={disabled ? null : onClick}
         {...focusableStates(this.props)}
         >
-        <div className={box}>
-          <div className={content}>
-            {this.renderIcon()}
-            {this.renderText()}
-          </div>
-        </div>
+        {this.renderContent()}
       </div>
     );
   }
