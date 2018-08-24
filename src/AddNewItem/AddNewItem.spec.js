@@ -5,7 +5,7 @@ import {resolveIn} from '../../test/utils';
 import {isTestkitExists, isEnzymeTestkitExists} from '../../test/utils/testkit-sanity';
 import {createDriverFactory} from 'wix-ui-test-utils/driver-factory';
 import addNewItemDriverFactory from './AddNewItem.driver';
-import tooltipDriverFactory from '../Tooltip/Tooltip.driver';
+
 
 import {addNewItemTestkitFactory} from '../../testkit';
 import {addNewItemTestkitFactory as enzymeAddNewItemTestkitFactory} from '../../testkit/enzyme';
@@ -14,9 +14,8 @@ const createDriver = createDriverFactory(addNewItemDriverFactory);
 
 import AddNewItem from './AddNewItem';
 
-describe.only('AddNewItem', () => {
+describe('AddNewItem', () => {
   const renderAddNewItem = (props = {}) => <AddNewItem {...props}/>;
-  const byHook = hook => element.querySelector(`[data-hook*="${hook}"]`);
 
   it('should have correct displayName', () => {
     const wrapper = mount(renderAddNewItem());
