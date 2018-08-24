@@ -6,7 +6,8 @@ module.exports.config = {
     browserName: 'chrome',
     chromeOptions: {
       args: ['--headless', '--disable-gpu']
-    }
+    },
+    maxInstances: 3
   },
   onPrepare() {
     browser.ignoreSynchronization = true;
