@@ -86,9 +86,11 @@ class RichTextArea extends WixComponent {
           return node.kind === 'document';
         },
         validate: document => {
+          console.log('document.nodes.size', document.nodes.size);
           return document.nodes.size ? null : true;
         },
         normalize: (change, document) => {
+          console.log('document.key', document.key);
           const block = Block.create(defaultBlock);
           change.insertNodeByKey(document.key, 0, block);
         }
@@ -96,17 +98,18 @@ class RichTextArea extends WixComponent {
       // Rule to insert a paragraph below a void node (the image) if that node is
       // the last one in the document.
       {
-        // match: {object: 'document'},
+        // match: {kind: 'document'},
         match: node => {
-          console.log('node', node);
           return node.kind === 'document';
         },
         validate: document => {
-          console.log('shit');
+          // console.log('shit', JSON.stringify(document.nodes, null, 2));
           const lastNode = document.nodes.last();
+          console.log('lastNode', lastNode.isVoid);
           return lastNode && lastNode.isVoid ? true : null;
         },
         normalize: (change, document) => {
+          console.log('document.key', document.key);
           const block = Block.create(defaultBlock);
           change.insertNodeByKey(document.key, document.nodes.size, block);
         }
@@ -144,6 +147,7 @@ class RichTextArea extends WixComponent {
   }
 
   setEditorState = (editorState, isTextChanged = true) => {
+    console.log(JSON.stringify(editorState, null, 2), isTextChanged);
     if (editorState.state) {
       editorState = editorState.state;
     }
@@ -152,6 +156,7 @@ class RichTextArea extends WixComponent {
 
   triggerChange(isTextChanged = true) {
     const serialized = htmlSerializer.serialize(this.state.editorState);
+    console.log('serialized', serialized, this.props.onChange);
     this.lastValue = serialized;
     if (isTextChanged) {
       const {onChange} = this.props;
@@ -167,9 +172,9 @@ class RichTextArea extends WixComponent {
       const parent = editorState.document.getParent(node.key);
       return parent && parent.type === type;
     });
-  };
+  }
 
-  hasMark = type => this.state.editorState.marks.some(mark => mark.type == type);
+  hasMark = type => this.state.editorState.activeMarks.some(mark => mark.type == type);
 
   hasLink = () => this.state.editorState.inlines.some(inline => inline.type === 'link');
 
@@ -185,15 +190,16 @@ class RichTextArea extends WixComponent {
       case 'image':
         return this.handleImageButtonClick(type);
     }
-  };
+  }
 
   handleMarkButtonClick = type => {
     const editorState = this.state.editorState
       .change()
       .toggleMark(type);
 
+    console.log('double shit', type);
     this.setEditorState(editorState);
-  };
+  }
 
   handleImageButtonClick = type => {
     this.props.onImageRequest(this.handleImageInput.bind(this));
@@ -202,13 +208,14 @@ class RichTextArea extends WixComponent {
   handleImageInput = text => {
     if (this.isValidImage(text)) {
       const editorState = this.insertImage(this.state.editorState, text);
-      console.log(JSON.stringify(editorState.state.document, null, 2));
+      // console.log(JSON.stringify(editorState.state.document, null, 2));
       this.setEditorState(editorState);
     }
   }
-  onPaste = (e, data, change, editor) => {
-    switch (data.type) {
-      case 'text': return this.onPasteText(data.text, change.state)
+
+  onPaste = (e, change, editor) => {
+    switch (e.type) {
+      case 'text': return this.onPasteText(e.text, change.state)
     }
   }
 
@@ -271,14 +278,16 @@ class RichTextArea extends WixComponent {
           .unwrapBlock(type == 'unordered-list' ? 'ordered-list' : 'unordered-list')
           .wrapBlock(type);
       } else {
+        console.log('111', isList, isType, type);
         transform
           .setBlock('list-item')
           .wrapBlock(type);
+        console.log('222', isList, isType);
       }
     }
 
     this.setEditorState(transform);
-  };
+  }
 
   handleLinkButtonClick = ({href, text} = {}) => {
     const {editorState} = this.state;
@@ -310,7 +319,7 @@ class RichTextArea extends WixComponent {
     }
 
     this.setEditorState(transform);
-  };
+  }
 
   render() {
     const {editorState} = this.state;
@@ -371,7 +380,7 @@ class RichTextArea extends WixComponent {
         </div>
       </div>
     );
-  };
+  }
 
   renderError = () => {
     const {errorMessage} = this.props;
@@ -388,7 +397,7 @@ class RichTextArea extends WixComponent {
         <div className={styles.exclamation}><FormFieldError/></div>
       </Tooltip>
     );
-  };
+  }
 }
 
 export default RichTextArea;
