@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import FormFieldError from 'wix-ui-icons-common/system/FormFieldError';
 import WixComponent from '../BaseComponents/WixComponent';
-import {Editor, Block} from 'slate';
+import {Block} from 'slate';
+import {Editor} from 'slate-react';
 import Tooltip from '../Tooltip';
 import RichTextEditorToolbar from './RichTextAreaToolbar';
 import htmlSerializer from './htmlSerializer';
@@ -41,13 +42,13 @@ class RichTextArea extends WixComponent {
     value: PropTypes.string,
     onChange: PropTypes.func,
     onImageRequest: PropTypes.func
-  }
+  };
 
   static defaultProps = {
     absoluteLinks: false,
     errorMessage: '',
     value: '<p></p>'
-  }
+  };
 
   /* eslint-disable react/prop-types */
   schema = {
@@ -95,10 +96,13 @@ class RichTextArea extends WixComponent {
       // Rule to insert a paragraph below a void node (the image) if that node is
       // the last one in the document.
       {
+        // match: {object: 'document'},
         match: node => {
+          console.log('node', node);
           return node.kind === 'document';
         },
         validate: document => {
+          console.log('shit');
           const lastNode = document.nodes.last();
           return lastNode && lastNode.isVoid ? true : null;
         },
