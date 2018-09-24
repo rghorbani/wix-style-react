@@ -22,7 +22,7 @@ const INLINE_TAGS = {
 const rules = [
   {
     deserialize(el, next) {
-      const type = BLOCK_TAGS[el.tagName];
+      const type = BLOCK_TAGS[el.tagName.toLowerCase()];
       if (!type) {
         return;
       }
@@ -30,7 +30,7 @@ const rules = [
       const data = {};
       switch (type) {
         case 'image': {
-          data.src = el.attribs.src;
+          data.src = el.getAttribute('src');
           break;
         }
         default: break;
@@ -40,27 +40,27 @@ const rules = [
         kind: 'block',
         type,
         data,
-        nodes: next(el.children)
+        nodes: next(el.childNodes)
       };
     },
-    serialize(object, children) {
-      if (object.kind !== 'block') {
+    serialize(obj, children) {
+      if (obj.kind !== 'block') {
         return;
       }
 
-      switch (object.type) {
+      switch (obj.type) {
         case 'paragraph': return <p>{children}</p>;
         case 'list-item': return <li>{children}</li>;
         case 'ordered-list': return <ol>{children}</ol>;
         case 'unordered-list': return <ul>{children}</ul>;//data-hook="editor-image"
-        case 'image': return <img data-hook="editor-image" src={object.data.get('src')}/>;
+        case 'image': return <img data-hook="editor-image" src={obj.data.get('src')}/>;
         default: return {children};
       }
     }
   },
   {
     deserialize(el, next) {
-      const type = MARK_TAGS[el.tagName];
+      const type = MARK_TAGS[el.tagName.toLowerCase()];
       if (!type) {
         return;
       }
@@ -68,15 +68,15 @@ const rules = [
       return {
         kind: 'mark',
         type,
-        nodes: next(el.children)
+        nodes: next(el.childNodes)
       };
     },
-    serialize(object, children) {
-      if (object.kind !== 'mark') {
+    serialize(obj, children) {
+      if (obj.kind !== 'mark') {
         return;
       }
 
-      switch (object.type) {
+      switch (obj.type) {
         case 'bold': return <strong>{children}</strong>;
         case 'italic': return <em>{children}</em>;
         case 'underline': return <u>{children}</u>;
@@ -86,7 +86,7 @@ const rules = [
   },
   {
     deserialize(el, next) {
-      const type = INLINE_TAGS[el.tagName];
+      const type = INLINE_TAGS[el.tagName.toLowerCase()];
       if (!type) {
         return;
       }
@@ -95,18 +95,18 @@ const rules = [
         kind: 'inline',
         type,
         data: {
-          href: el.attribs.href
+          href: el.getAttribute('href')
         },
-        nodes: next(el.children)
+        nodes: next(el.childNodes)
       };
     },
-    serialize(object, children) {
-      if (object.kind !== 'inline') {
+    serialize(obj, children) {
+      if (obj.kind !== 'inline') {
         return;
       }
 
-      switch (object.type) {
-        case 'link': return <a rel="noopener noreferrer" target="_blank" href={object.data.get('href')}>{children}</a>;
+      switch (obj.type) {
+        case 'link': return <a rel="noopener noreferrer" target="_blank" href={obj.data.get('href')}>{children}</a>;
         default: return {children};
       }
     }

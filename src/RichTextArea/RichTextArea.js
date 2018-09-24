@@ -87,9 +87,9 @@ class RichTextArea extends WixComponent {
         validate: document => {
           return document.nodes.size ? null : true;
         },
-        normalize: (transform, document) => {
+        normalize: (change, document) => {
           const block = Block.create(defaultBlock);
-          transform.insertNodeByKey(document.key, 0, block);
+          change.insertNodeByKey(document.key, 0, block);
         }
       },
       // Rule to insert a paragraph below a void node (the image) if that node is
@@ -102,9 +102,9 @@ class RichTextArea extends WixComponent {
           const lastNode = document.nodes.last();
           return lastNode && lastNode.isVoid ? true : null;
         },
-        normalize: (transform, document) => {
+        normalize: (change, document) => {
           const block = Block.create(defaultBlock);
-          transform.insertNodeByKey(document.key, document.nodes.size, block);
+          change.insertNodeByKey(document.key, document.nodes.size, block);
         }
       }
     ]
@@ -127,9 +127,8 @@ class RichTextArea extends WixComponent {
     if (isPlaceholderChanged || isValueChanged) {
       if (props.isAppend) {
         const newEditorState = this.state.editorState
-              .transform()
-              .insertText(props.value)
-              .apply();
+              .change()
+              .insertText(props.value);
 
         this.setEditorState(newEditorState);
       }
@@ -141,6 +140,9 @@ class RichTextArea extends WixComponent {
   }
 
   setEditorState = (editorState, isTextChanged = true) => {
+    if (editorState.state) {
+      editorState = editorState.state;
+    }
     this.setState({editorState}, () => this.triggerChange(isTextChanged));
   };
 
@@ -183,9 +185,8 @@ class RichTextArea extends WixComponent {
 
   handleMarkButtonClick = type => {
     const editorState = this.state.editorState
-      .transform()
-      .toggleMark(type)
-      .apply();
+      .change()
+      .toggleMark(type);
 
     this.setEditorState(editorState);
   };
@@ -197,12 +198,13 @@ class RichTextArea extends WixComponent {
   handleImageInput = text => {
     if (this.isValidImage(text)) {
       const editorState = this.insertImage(this.state.editorState, text);
+      console.log(JSON.stringify(editorState.state.document, null, 2));
       this.setEditorState(editorState);
     }
   }
-  onPaste = (e, data, state, editor) => {
+  onPaste = (e, data, change, editor) => {
     switch (data.type) {
-      case 'text': return this.onPasteText(data.text, state)
+      case 'text': return this.onPasteText(data.text, change.state)
     }
   }
 
@@ -217,18 +219,17 @@ class RichTextArea extends WixComponent {
 
   insertImage = (state, src) => {
     return state
-      .transform()
+      .change()
       .insertBlock({
         type: 'image',
         isVoid: true,
         data: { src }
-      })
-      .apply();
+      });
   }
 
   handleBlockButtonClick = type => {
     let {editorState} = this.state;
-    let transform = editorState.transform();
+    let transform = editorState.change();
     const {document} = editorState;
 
     // Handle everything but list buttons.
@@ -272,13 +273,12 @@ class RichTextArea extends WixComponent {
       }
     }
 
-    editorState = transform.apply();
-    this.setState({editorState});
+    this.setEditorState(transform);
   };
 
   handleLinkButtonClick = ({href, text} = {}) => {
     const {editorState} = this.state;
-    const transform = editorState.transform();
+    const transform = editorState.change();
     const decoratedHref = this.props.absoluteLinks
       ? makeHrefAbsolute(href)
       : href;
@@ -305,10 +305,10 @@ class RichTextArea extends WixComponent {
         .collapseToEnd();
     }
 
-    this.setEditorState(transform.apply());
+    this.setEditorState(transform);
   };
 
-  render = () => {
+  render() {
     const {editorState} = this.state;
     const {error, placeholder, disabled, resizable, onImageRequest, dataHook} = this.props;
     const className = classNames(styles.container, {
@@ -355,12 +355,12 @@ class RichTextArea extends WixComponent {
             schema={this.schema}
             state={editorState}
             onPaste={this.onPaste}
-            onChange={e =>
+            onChange={change =>
               {
-                const serialized = htmlSerializer.serialize(e);
+                const serialized = htmlSerializer.serialize(change.value);
                 const isValueChanged = serialized !== this.lastValue;
                 this.lastValue = serialized;
-                this.setEditorState(e, isValueChanged)
+                this.setEditorState(change, isValueChanged)
               }
             }/>
           {this.renderError()}
