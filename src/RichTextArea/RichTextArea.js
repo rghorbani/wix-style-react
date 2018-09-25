@@ -370,7 +370,7 @@ class RichTextArea extends WixComponent {
             onPaste={this.onPaste}
             onChange={change =>
               {
-                const serialized = htmlSerializer.serialize(change.value);
+                const serialized = htmlSerializer.serialize(change.state);
                 const isValueChanged = serialized !== this.lastValue;
                 this.lastValue = serialized;
                 this.setEditorState(change, isValueChanged)
