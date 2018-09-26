@@ -16,7 +16,7 @@ describe('ImageViewer', () => {
   const removeImage = jest.fn();
 
   describe('when default scenario', () => {
-    beforeEach(() => {
+    beforeEach(done => {
       props = {
         imageUrl: IMAGE_URL,
         onAddImage: addImage,
@@ -24,6 +24,10 @@ describe('ImageViewer', () => {
         onRemoveImage: removeImage
       };
       driver = createDriver(<ImageViewer {...props}/>);
+
+      setTimeout(() => {
+        done();
+      }, 1);
     });
 
     it('should display image url', () => {

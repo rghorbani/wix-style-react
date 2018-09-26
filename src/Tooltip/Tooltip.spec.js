@@ -15,8 +15,12 @@ describe('Tooltip', () => {
   const _props = {showDelay: 5, hideDelay: 5, content: <TooltipContent children={'I\'m the content'}/>};
   const children = <div>Here there is a children</div>;
 
-  beforeEach(() => {
+  beforeEach(done => {
     document.body.innerHTML = '';
+
+    setTimeout(() => {
+      done();
+    }, 1);
   });
 
   it('should be hidden by default', () => {
