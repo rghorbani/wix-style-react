@@ -121,6 +121,7 @@ class SideMenuDrill extends React.Component {
         }
       },
       onBackHandler: event => {
+        // console.log('event', event);
         this.navigateToMenu(parentMenuKey, SlideDirection.out);
 
         if (menu.props.onBackHandler) {
@@ -232,6 +233,7 @@ class SideMenuDrill extends React.Component {
 
   render() {
     const {menus, currentMenuId, previousMenuId, showMenuA, slideDirection} = this.state;
+    console.log(menus, currentMenuId, previousMenuId, showMenuA, slideDirection);
     const menuAId = showMenuA ? currentMenuId : previousMenuId;
     const menuBId = showMenuA ? previousMenuId : currentMenuId;
 
