@@ -34,37 +34,43 @@ describe('Table', () => {
       rowDataHook
     });
 
-    const driver = createDriver(<DataTable {...props}/>);
-
     it('should display nothing', () => {
+      const driver = createDriver(<DataTable {...props}/>);
       expect(driver.isDisplayingNothing()).toBeTruthy();
     });
 
     it('should count 0 rows', () => {
+      const driver = createDriver(<DataTable {...props}/>);
       expect(driver.getRowsCount()).toEqual(0);
     });
 
     it('should count 0 rows with class name', () => {
+      const driver = createDriver(<DataTable {...props}/>);
       expect(driver.getRowsWithClassCount(defaultProps.rowClass)).toEqual(0);
     });
 
     it('should find 0 rows with data-hook', () => {
+      const driver = createDriver(<DataTable {...props}/>);
       expect(driver.getRowsWithDataHook(rowDataHook).length).toEqual(0);
     });
 
     it('should not find a row with data-hook', () => {
+      const driver = createDriver(<DataTable {...props}/>);
       expect(driver.getRowWithDataHook(rowDataHook)).toEqual(null);
     });
 
     it('should not a header only', () => {
+      const driver = createDriver(<DataTable {...props}/>);
       expect(driver.isDisplayingHeaderOnly()).toBeFalsy;
     });
 
     it('should not a header ', () => {
+      const driver = createDriver(<DataTable {...props}/>);
       expect(driver.isDisplayingHeader()).toBeFalsy;
     });
 
     it('should not find a child with id', () => {
+      const driver = createDriver(<DataTable {...props}/>);
       expect(driver.hasChildWithId(defaultProps.id)).toBeFalsy;
     });
 
@@ -399,7 +405,7 @@ describe('Table', () => {
         ...defaultProps,
         columns: [
           {title: 'Row Num', render: (row, rowNum) => rowNum},
-          {title: 'A', infoTooltip: {content: 'Vary informative tooltip text'}, render: row => row.a},
+          {title: 'A', infoTooltipProps: {content: 'Vary informative tooltip text'}, render: row => row.a},
           {title: 'B', render: row => row.b}
         ]
       };

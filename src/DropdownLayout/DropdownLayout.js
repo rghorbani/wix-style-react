@@ -3,9 +3,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import WixComponent from '../BaseComponents/WixComponent';
-import isEqual from 'deep-eql';
+import isEqual from 'lodash/isEqual';
 import trim from 'lodash/trim';
 import findIndex from 'lodash/findIndex';
+import scrollIntoView from '../utils/scrollIntoView';
 
 const modulu = (n, m) => {
   const remain = n % m;
@@ -121,9 +122,19 @@ class DropdownLayout extends WixComponent {
     } while (!this.isSelectableOption(options[newHovered]));
 
     this.setState({hovered: newHovered});
-    this.options.scrollTop = (newHovered - 2) * 35;
+
+    const menuElement = this.options;
+    const hoveredElement = this.options.childNodes[newHovered];
+
+    scrollIntoView(menuElement, hoveredElement);
   }
 
+  /**
+   * Handle keydown events for the DropdownLayout, mostly for accessibility
+   *
+   * @param {SyntheticEvent} event - The keydown event triggered by React
+   * @returns {boolean} - Whether the event was handled by the component
+   */
   _onKeyDown(event) {
     if (!this.props.visible || this.props.isComposing) {
       return false;
@@ -191,13 +202,14 @@ class DropdownLayout extends WixComponent {
   }
 
   render() {
-    const {options, visible, dropDirectionUp, tabIndex, fixedHeader, fixedFooter, withArrow, onMouseEnter, onMouseLeave} = this.props;
+    const {options, visible, dropDirectionUp, tabIndex, fixedHeader, fixedFooter, withArrow, onMouseEnter, onMouseLeave, inContainer} = this.props;
     const contentContainerClassName = classNames({
       [styles.contentContainer]: true,
       [styles.shown]: visible,
       [styles.up]: dropDirectionUp,
       [styles.down]: !dropDirectionUp,
-      [styles.withArrow]: withArrow
+      [styles.withArrow]: withArrow,
+      [styles.containerStyles]: !inContainer
     });
 
     return (
@@ -357,7 +369,8 @@ DropdownLayout.propTypes = {
   onMouseEnter: PropTypes.func,
   onMouseLeave: PropTypes.func,
   itemHeight: PropTypes.oneOf(['small', 'big']),
-  selectedHighlight: PropTypes.bool
+  selectedHighlight: PropTypes.bool,
+  inContainer: PropTypes.bool
 };
 
 DropdownLayout.defaultProps = {
@@ -367,7 +380,8 @@ DropdownLayout.defaultProps = {
   maxHeightPixels: 260,
   closeOnSelect: true,
   itemHeight: 'small',
-  selectedHighlight: true
+  selectedHighlight: true,
+  inContainer: false
 };
 
 DropdownLayout.NONE_SELECTED_ID = NOT_HOVERED_INDEX;
