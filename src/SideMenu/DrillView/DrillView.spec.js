@@ -82,7 +82,6 @@ describe('DrillView', () => {
     );
   }
 
-  /*
   it('should have a sticky footer through props', () => {
     const driver = createDriver(
       <SideMenuDrill stickyFooter={<SideMenu.Footer>{getFooter(1)}</SideMenu.Footer>}>
@@ -195,7 +194,6 @@ describe('DrillView', () => {
 
     expect(driver.getMenuDriver().isLinkDisabledByIndex(3)).toBe(false);
   });
-  */
 
   it('should navigate to a parent menu and sub menu link should be active', done => {
     const activeLevel = 1;
