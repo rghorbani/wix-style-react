@@ -44,4 +44,3 @@ describe('BulkSelection', () => {
     expect(_isSelected(3)).toBeFalsy();
   });
 });
-
