@@ -61,6 +61,7 @@ class ImageViewer extends WixComponent {
                 data-hook="image-viewer-image"
                 className={style.image}
                 src={imageUrl}
+                alt=""
               />
             </div>
             <div className={style.imageBackground}>

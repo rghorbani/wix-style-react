@@ -24,7 +24,7 @@ describe('ImageViewer', () => {
         onUpdateImage: updateImage,
         onRemoveImage: removeImage,
       };
-      driver = createDriver(<ImageViewer {...props}/>);
+      driver = createDriver(<ImageViewer {...props} />);
 
       setTimeout(() => {
         done();
